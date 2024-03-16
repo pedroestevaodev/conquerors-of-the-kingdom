@@ -17,7 +17,7 @@ public static void main(String[] args) {
 
         // Verificando se a quantidade de personagens é menor do que 5 (padrão)
         if (quantidadeGuerreiros < 5 || quantidadeArqueiros < 5 || quantidadeLanceiros < 5) {
-            System.out.println("Atenção: A chance de vitória é de apenas 10% devido à quantidade insuficiente de inimigos.");
+            System.out.println("Atenção: A chance de vitória é de apenas 10% devido à quantidade insuficiente de inimigos."); //Criar função para porcentagem de chance de vitória
         }
 
         // Criando inimigos
@@ -248,5 +248,6 @@ public static void main(String[] args) {
         }
 
         return true;
+
     }
 }

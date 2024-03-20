@@ -1,45 +1,45 @@
-import com.exercito.Batalha;
-import com.jogador.Mapa;
-import com.jogador.Player;
+import com.jogo.Mensagens;
+import com.jogo.Menu;
+import com.player.CriarPlayer;
+import com.player.Player;
+import com.territorio.GerenciadorReinos;
 import com.territorio.Reino;
+import com.utils.Utils;
 
+import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
+import static java.lang.System.*;
 
 public class Jogo {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        /*Testes*/
+//        Reino reino = new Reino("Reino da Aventura", 100);
+//        Player player = new Player("João", "rei", reino);
 
-        System.out.println("Bem-vindo ao Conquistadores do Reino!");
-        System.out.println("Por favor, digite seu nome:");
-        String nomePlayer = scanner.nextLine();
+        Properties prop = new Properties();
+        Scanner scanner = new Scanner(in);
+        Utils ut = new Utils(scanner);
+        Mensagens msg = new Mensagens();
 
-        System.out.println("Olá, " + nome + "! Você deseja ser um rei ou uma rainha? (Digite 'rei' ou 'rainha'):");
-        String generoPlayer = scanner.nextLine();
+        CriarPlayer criar = new CriarPlayer(scanner);
+        Player player = criar.criarJogador();
 
-        System.out.println("Ótimo, " + genero + " " + nome + "! Agora, qual será o nome do seu reino?");
-        String reinoPlayer = scanner.nextLine();
-
-        System.out.println("\nConfira os dados:");
-        System.out.println("Nome: " + nome);
-        System.out.println("Gênero: " + genero);
-        System.out.println("Nome do Reino: " + nomeReino);
-        System.out.println("Os dados estão corretos? (Digite 'sim' ou 'nao'):");
-        String confirmacao = scanner.nextLine();
-
-        if (confirmacao.equalsIgnoreCase("sim")) {
-            // Dados confirmados, criar o Player
-            Player player = new Player(nome, genero, nomeReino);
-            System.out.println("\nJogador criado com sucesso!");
-            System.out.println("Bem-vindo(a), " + player.getNome() + ", o(a) " + player.getGenero() + " do reino " + player.getNomeReino() + "!");
-        } else if (confirmacao.equalsIgnoreCase("nao")) {
-            // Dados incorretos, permitir ao jogador corrigir
-            System.out.println("\nPor favor, digite 'nome', 'genero' ou 'reino' para corrigir as informações correspondentes:");
-            String opcaoCorrecao = scanner.nextLine();
-            corrigirInformacoes(opcaoCorrecao, scanner);
-        } else {
-            // Resposta inválida
-            System.out.println("\nResposta inválida. Por favor, execute o programa novamente.");
+        String perguntaIniciar = ut.validarInfo("Está pronto para iniciar a jornada? (sim ou nao)", "Por favor, digite 'sim' ou 'nao'.", valor -> valor.equalsIgnoreCase("sim") || valor.equalsIgnoreCase("nao"));
+        if (perguntaIniciar.equalsIgnoreCase("nao")) {
+            out.println("\nEncerrando o jogo...");
+            exit(0);
         }
+
+        ut.limparPrompt();
+        ut.exibirTextoPausado(msg.parametrosMensagem(msg.exibirMensagem("mensagem.start."+player.getGenero()), player.getNome(), player.getGenero(), player.getReino().getNome()).replace("[BREAK]", "\n"));
+        out.println("\n\n");
+
+        List<Reino> reinos = new GerenciadorReinos().gerarReinos();
+
+        Menu menu = new Menu(player, reinos);
+
+        menu.exibirMenu();
 
         scanner.close();
     }

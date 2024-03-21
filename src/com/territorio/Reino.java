@@ -2,7 +2,6 @@ package com.territorio;
 
 import com.exercito.Tropa;
 import com.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,15 +11,21 @@ import static java.lang.System.*;
 public class Reino {
     private String nome;
     private int recursos;
+    private int populacao;
     private List<Edificio> edificios;
     private List<Tropa> tropas;
+    private List<Reino> aliados;
+    private List<Reino> dominados;
     private Scanner scanner;
 
-    public Reino(String nome, int recursos) {
+    public Reino(String nome, int recursos, int populacao) {
         this.nome = nome;
         this.recursos = recursos;
+        this.populacao = populacao;
         this.edificios = new ArrayList<>();
         this.tropas = new ArrayList<>();
+        this.aliados = new ArrayList<>();
+        this.dominados = new ArrayList<>();
         this.scanner = new Scanner(in);
     }
 
@@ -54,6 +59,30 @@ public class Reino {
 
     public void setTropas(List<Tropa> tropas) {
         this.tropas = tropas;
+    }
+
+    public int getPopulacao() {
+        return populacao;
+    }
+
+    public void setPopulacao(int populacao) {
+        this.populacao = populacao;
+    }
+
+    public List<Reino> getAliados() {
+        return aliados;
+    }
+
+    public void setAliados(List<Reino> aliados) {
+        this.aliados = aliados;
+    }
+
+    public List<Reino> getDominados() {
+        return dominados;
+    }
+
+    public void setDominados(List<Reino> dominados) {
+        this.dominados = dominados;
     }
 
     public void interagirReino(Reino reino) {

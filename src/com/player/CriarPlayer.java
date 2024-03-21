@@ -62,7 +62,7 @@ public class CriarPlayer {
 
         out.println("\n"+msg.exibirMensagem("mensagem.criacaoplayer.sucesso."+generoPlayer)+"\n");
 
-        Reino reino = new Reino(reinoPlayer, 100);
+        Reino reino = new Reino(reinoPlayer, 100, 10);
 
         return new Player(nomePlayer, generoPlayer, reino);
     }

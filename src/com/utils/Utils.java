@@ -1,10 +1,9 @@
 package com.utils;
 
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Scanner;
 import java.util.function.Predicate;
-import static java.lang.System.*;
+import static java.lang.System.out;
 
 public class Utils {
     private final Scanner scanner;
@@ -54,7 +53,7 @@ public class Utils {
     public void exibirTextoPausado(@NotNull String texto) {
         for (char c : texto.toCharArray()) {
             out.print(c);
-            textoPausado(50);
+            textoPausado(0);
         }
     }
 }

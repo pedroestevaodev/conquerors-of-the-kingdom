@@ -36,13 +36,4 @@ public class Player {
     public void setReino(Reino reino) {
         this.reino = reino;
     }
-
-//    @Override
-//    public String toString() {
-//        return "Jogador{" +
-//                "nome='" + nome + '\'' +
-//                ", genero='" + genero + '\'' +
-//                ", nomeReino='" + nomeReino + '\'' +
-//                '}';
-//    }
 }

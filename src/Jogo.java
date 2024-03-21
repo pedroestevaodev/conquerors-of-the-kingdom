@@ -17,6 +17,7 @@ public class Jogo {
 //        Reino reino = new Reino("Reino da Aventura", 100);
 //        Player player = new Player("João", "rei", reino);
 
+        out.println("\n\n");
         Properties prop = new Properties();
         Scanner scanner = new Scanner(in);
         Utils ut = new Utils(scanner);

@@ -4,6 +4,7 @@ public class Tropa {
     private String nome;
     private int custoTreinamento;
     private int forca;
+    private int defesa;
 
     public Tropa(String nome, int custoTreinamento) {
         this.nome = nome;
@@ -20,5 +21,17 @@ public class Tropa {
 
     public int getForca() {
         return forca;
+    }
+
+    public void setForca(int forca) {
+        this.forca = forca;
+    }
+
+    public int getDefesa() {
+        return defesa;
+    }
+
+    public void setDefesa(int defesa) {
+        this.defesa = defesa;
     }
 }

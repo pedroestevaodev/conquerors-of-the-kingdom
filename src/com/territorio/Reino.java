@@ -102,7 +102,7 @@ public class Reino {
     public void interagirReino(Reino reino) {
         Utils ut = new Utils(scanner);
 
-        out.println("\nVocê escolheu interagir com o reino " + getNome() + ".");
+        out.println("\n****************  " + getNome() + "  *****************");
         out.println("1. Batalhar");
         out.println("2. Fazer Aliança");
         out.println("3. Coletar Recursos");

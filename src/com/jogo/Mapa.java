@@ -25,7 +25,7 @@ public class Mapa {
 
         ut.exibirTextoPausado("\nExplorando o mapa...\n");
 
-        ut.exibirTextoPausado("\nReinos disponíveis:\n");
+        out.println("\n******************  REINOS  ******************");
         for (int i = 0; i < reinos.size(); i++) {
             out.println((i+1) + ". " + reinos.get(i).getNome());
         }

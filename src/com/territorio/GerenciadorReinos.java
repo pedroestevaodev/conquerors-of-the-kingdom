@@ -18,7 +18,7 @@ public class GerenciadorReinos {
         int numeroReinos = (int) (Math.random() * (NUMERO_MAXIMO_REINOS - NUMERO_MINIMO_REINOS + 1)) + NUMERO_MINIMO_REINOS;
 
         for (int i = 0; i < numeroReinos; i++) {
-            int recursosReino = (int) (Math.random() * (500 - 80 + 1));
+            int recursosReino = (int) (Math.random() * (5000 - 800 + 1));
             int populacaoReino = (int) (Math.random() * (200 - 10 + 1));
             Set<String> nomesReinos = msg.obterDados("/resources/reinos.properties");
 
@@ -61,9 +61,9 @@ public class GerenciadorReinos {
         int tipo = random.nextInt(3);
 
         return switch (tipo) {
-            case 0 -> new Edificio("Quartel", 50, 20);
-            case 1 -> new Edificio("Mina de Ouro", 80, 0);
-            case 2 -> new Edificio("Torre de Defesa", 30, 8);
+            case 0 -> new Edificio("Quartel", 500, 20);
+            case 1 -> new Edificio("Mina de Ouro", 800, 0);
+            case 2 -> new Edificio("Torre de Defesa", 300, 8);
             default -> null;
         };
     }
@@ -73,9 +73,9 @@ public class GerenciadorReinos {
         int tipo = random.nextInt(3);
 
         return switch (tipo) {
-            case 0 -> new Tropa("Arqueiro", 6);
-            case 1 -> new Tropa("Cavaleiro", 10);
-            case 2 -> new Tropa("Lanceiro", 4);
+            case 0 -> new Tropa("Arqueiro", 60, 100, 20, 15);
+            case 1 -> new Tropa("Cavaleiro", 100, 100, 50, 40);
+            case 2 -> new Tropa("Lanceiro", 40, 100, 10, 7);
             default -> null;
         };
     }

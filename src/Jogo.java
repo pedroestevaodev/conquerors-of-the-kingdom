@@ -14,7 +14,7 @@ import static java.lang.System.*;
 public class Jogo {
     public static void main(String[] args) {
         /*Testes*/
-        Reino reino = new Reino("Reino da Aventura", 100, 20);
+        Reino reino = new Reino("Reino da Aventura", 1000, 10);
         Player player = new Player("João", "rei", reino);
 
         out.println("\n\n");

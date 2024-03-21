@@ -45,16 +45,16 @@ public class Edificio {
 
         while (true) {
             out.println("\n***********  CONSTRUIR EDIFÍCIOS  ************");
-            out.println("1. Quartel - 50 de ouro (Expande o limite de habitantes para 20)");
-            out.println("2. Mina de Ouro - 80 de ouro (Garante uma certa quantia de ouro de tempos em tempos)");
-            out.println("3. Torre de Defesa - 30 de ouro (Expande o limite de habitantes para 8)");
+            out.println("1. Quartel - 500 de ouro (Expande o limite de habitantes para +20)");
+            out.println("2. Mina de Ouro - 800 de ouro (Garante uma certa quantia de ouro de tempos em tempos)");
+            out.println("3. Torre de Defesa - 300 de ouro (Expande o limite de habitantes para +12)");
             out.println("0. Voltar");
 
             int opcao = ut.gerarPerguntaInt("Escolha um edifício para construir: ");
 
             switch (opcao) {
                 case 1:
-                    Edificio quartel = new Edificio("Quartel", 50, 20);
+                    Edificio quartel = new Edificio("Quartel", 500, 20);
 
                     if (reino.getRecursos() >= quartel.getCusto()) {
                         ut.exibirTextoPausado("\nConstruindo Quartel...");
@@ -67,7 +67,7 @@ public class Edificio {
                     }
                     break;
                 case 2:
-                    Edificio minaDeOuro = new Edificio("Mina de Ouro", 80, 0);
+                    Edificio minaDeOuro = new Edificio("Mina de Ouro", 800, 0);
 
                     if (reino.getRecursos() >= minaDeOuro.getCusto()) {
                         ut.exibirTextoPausado("\nConstruindo Mina de Ouro...");
@@ -81,7 +81,7 @@ public class Edificio {
                     }
                     break;
                 case 3:
-                    Edificio torreDeDefesa = new Edificio("Torre de Defesa", 30, 8);
+                    Edificio torreDeDefesa = new Edificio("Torre de Defesa", 300, 12);
 
                     if (reino.getRecursos() >= torreDeDefesa.getCusto()) {
                         ut.exibirTextoPausado("\nConstruindo Torre de Defesa...");

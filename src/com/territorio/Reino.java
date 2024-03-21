@@ -1,7 +1,10 @@
 package com.territorio;
 
+import com.exercito.ForcaDefesa;
 import com.exercito.Tropa;
 import com.utils.Utils;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,6 +15,7 @@ public class Reino {
     private String nome;
     private int recursos;
     private int populacao;
+    private ForcaDefesa forcaDefesa;
     private List<Edificio> edificios;
     private List<Tropa> tropas;
     private List<Reino> aliados;
@@ -22,11 +26,13 @@ public class Reino {
         this.nome = nome;
         this.recursos = recursos;
         this.populacao = populacao;
+        this.forcaDefesa = new ForcaDefesa(0, 0);
         this.edificios = new ArrayList<>();
         this.tropas = new ArrayList<>();
         this.aliados = new ArrayList<>();
         this.dominados = new ArrayList<>();
         this.scanner = new Scanner(in);
+        atualizaForcaDefesaReino(this);
     }
 
     public String getNome() {
@@ -43,6 +49,14 @@ public class Reino {
 
     public void setRecursos(int recursos) {
         this.recursos = recursos;
+    }
+
+    public ForcaDefesa getForcaDefesa() {
+        return forcaDefesa;
+    }
+
+    public void setForcaDefesa(ForcaDefesa forcaDefesa) {
+        this.forcaDefesa = forcaDefesa;
     }
 
     public List<Edificio> getEdificios() {
@@ -136,12 +150,24 @@ public class Reino {
         }
     }
 
-    private void coletarRecursos(Reino reino) {
+    private void coletarRecursos(@NotNull Reino reino) {
         out.println("\nColetando recursos do reino " + getNome() + "...");
 
         int recursos = getRecursos();
         reino.setRecursos(reino.getRecursos() + getRecursos());
 
         out.println("\nVocê coletou " + getRecursos() + " de recursos deste reino!");
+    }
+
+    public void atualizaForcaDefesaReino(@NotNull Reino reino) {
+        int forcaTotal = 0;
+        int defesaTotal = 0;
+
+        for (Tropa tropa : reino.getTropas()) {
+            forcaTotal += tropa.getForca();
+            defesaTotal += tropa.getDefesa();
+        }
+
+        setForcaDefesa(new ForcaDefesa(forcaTotal, defesaTotal));
     }
 }

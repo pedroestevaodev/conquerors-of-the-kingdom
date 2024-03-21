@@ -1,5 +1,6 @@
 package com.jogo;
 
+import com.exercito.Tropa;
 import com.player.Player;
 import com.territorio.Edificio;
 import com.territorio.Reino;
@@ -47,6 +48,7 @@ public class Menu {
                     edificio.construirEdificios(player.getReino());
                     break;
                 case 4:
+                    gerenciarTropas();
                     break;
                 case 0:
                     exit(0);
@@ -104,6 +106,69 @@ public class Menu {
                         ut.exibirTextoPausado("\n- " + torresDeDefesa + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.torrededefesa." + (torresDeDefesa == 1 ? "singular" : "plural"))));
                         out.println();
                     }
+                    break;
+                case 0:
+                    ut.exibirTextoPausado("\nVoltando ao menu...\n");
+                    return;
+                default:
+                    out.println("\nOpção inválida. Por favor, escolha uma opção válida.");
+            }
+        }
+    }
+
+    private void gerenciarTropas() {
+        Utils ut = new Utils(scanner);
+        Mensagens msg = new Mensagens();
+
+        while (true) {
+            out.println("\n*************  GERENCIAR TROPAS  *************");
+            out.println("1. Verificar Força/Defesa do Reino");
+            out.println("2. Verificar Tropas");
+            out.println("3. Expandir Tropas");
+            out.println("4. Treinar Tropas");
+            out.println("0. Voltar");
+
+            int opcaoReino = ut.gerarPerguntaInt("Escolha uma opção: ");
+
+            switch (opcaoReino) {
+                case 1:
+                    ut.exibirTextoPausado("\nForça/Defesa do Reino:");
+                    ut.exibirTextoPausado("\n- Força: " + player.getReino().getForcaDefesa().getForca());
+                    ut.exibirTextoPausado("\n- Defesa: " + player.getReino().getForcaDefesa().getDefesa());
+                    out.println();
+                    break;
+                case 2:
+                    ut.exibirTextoPausado("\nTropas em Serviço ["+ player.getReino().getTropas().toArray().length + "/" + player.getReino().getPopulacao() + "]:");
+                    if (player.getReino().getTropas().toArray().length == 0) {
+                        ut.exibirTextoPausado("\n- Seu reino ainda não possui tropas em serviço! Que tal contratar?\n");
+                    } else {
+                        int arqueiros = 0;
+                        int cavaleiros = 0;
+                        int lanceiros = 0;
+
+                        for (Tropa tropa : player.getReino().getTropas()) {
+                            if (tropa.getNome().equalsIgnoreCase("Arqueiro")) {
+                                arqueiros++;
+                            } else if (tropa.getNome().equalsIgnoreCase("Cavaleiro")) {
+                                cavaleiros++;
+                            } else {
+                                lanceiros++;
+                            }
+                        }
+
+                        ut.exibirTextoPausado("\n- " + arqueiros + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.arqueiro." + (arqueiros == 1 ? "singular" : "plural"))));
+                        ut.exibirTextoPausado("\n- " + cavaleiros + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.cavaleiro." + (cavaleiros == 1 ? "singular" : "plural"))));
+                        ut.exibirTextoPausado("\n- " + lanceiros + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.lanceiro." + (lanceiros == 1 ? "singular" : "plural"))));
+                        out.println();
+                    }
+                    break;
+                case 3:
+                    Tropa tropaContratar = new Tropa();
+                    tropaContratar.contratar(player.getReino());
+                    break;
+                case 4:
+                    Tropa tropaTreinar = new Tropa();
+                    tropaTreinar.treinar(player.getReino());
                     break;
                 case 0:
                     ut.exibirTextoPausado("\nVoltando ao menu...\n");

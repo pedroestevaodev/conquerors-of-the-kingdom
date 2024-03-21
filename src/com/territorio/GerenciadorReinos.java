@@ -1,16 +1,18 @@
 package com.territorio;
 
 import com.exercito.Tropa;
+import com.jogo.Mensagens;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
+import static java.lang.System.out;
 
 public class GerenciadorReinos {
     private static final int NUMERO_MINIMO_REINOS = 3;
     private static final int NUMERO_MAXIMO_REINOS = 10;
 
     public List<Reino> gerarReinos() {
+        Mensagens msg = new Mensagens();
         List<Reino> reinos = new ArrayList<>();
         Random random = new Random();
         int numeroReinos = (int) (Math.random() * (NUMERO_MAXIMO_REINOS - NUMERO_MINIMO_REINOS + 1)) + NUMERO_MINIMO_REINOS;
@@ -18,13 +20,26 @@ public class GerenciadorReinos {
         for (int i = 0; i < numeroReinos; i++) {
             int recursosReino = (int) (Math.random() * (500 - 80 + 1));
             int populacaoReino = (int) (Math.random() * (200 - 10 + 1));
+            Set<String> nomesReinos = msg.obterDados("/resources/reinos.properties");
 
-            Reino reino = new Reino("Reino " + (i + 1), recursosReino, populacaoReino);
+            String nomeAleatorio = "";
+
+            if (nomesReinos != null && !nomesReinos.isEmpty()) {
+                nomeAleatorio = msg.aleatorizarDados(nomesReinos, random);
+            } else {
+                out.println("\nNão foi possível carregar os nomes aleatórios para os reinos.");
+            }
+
+            Reino reino = new Reino(nomeAleatorio, recursosReino, populacaoReino);
 
             List<Edificio> edificios = new ArrayList<>();
             int numeroEdificios = random.nextInt(10) + 1;
             for (int j = 0; j < numeroEdificios; j ++) {
-                edificios.add(gerarEdificios());
+                Edificio edificioGerado = gerarEdificios();
+                edificios.add(edificioGerado);
+                if (edificioGerado.getNome().equalsIgnoreCase("Mina de Ouro")) {
+                    iniciarGeracaoDeOuro(reino);
+                }
             }
             reino.setEdificios(edificios);
 
@@ -63,5 +78,15 @@ public class GerenciadorReinos {
             case 2 -> new Tropa("Lanceiro", 4);
             default -> null;
         };
+    }
+
+    private void iniciarGeracaoDeOuro(Reino reino) {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                reino.setRecursos(reino.getRecursos() + 1);
+            }
+        }, 5000, 5000);
     }
 }

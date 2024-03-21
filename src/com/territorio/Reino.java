@@ -16,7 +16,7 @@ public class Reino {
     private List<Tropa> tropas;
     private List<Reino> aliados;
     private List<Reino> dominados;
-    private Scanner scanner;
+    private final Scanner scanner;
 
     public Reino(String nome, int recursos, int populacao) {
         this.nome = nome;
@@ -88,7 +88,7 @@ public class Reino {
     public void interagirReino(Reino reino) {
         Utils ut = new Utils(scanner);
 
-        out.println("Você escolheu interagir com o reino " + getNome() + ".");
+        out.println("\nVocê escolheu interagir com o reino " + getNome() + ".");
         out.println("1. Batalhar");
         out.println("2. Fazer Aliança");
         out.println("3. Coletar Recursos");
@@ -107,41 +107,41 @@ public class Reino {
                 coletarRecursos(reino);
                 break;
             case 0:
-                out.println("Voltando ao mapa...");
+                out.println("\nVoltando ao mapa...");
                 break;
             default:
-                out.println("Opção inválida. Por favor, escolha uma opção válida.");
+                out.println("\nOpção inválida. Por favor, escolha uma opção válida.");
         }
     }
 
     private void batalhar(Reino reino) {
-        out.println("Iniciando batalha com o reino " + getNome() + "...");
+        out.println("\nIniciando batalha com o reino " + getNome() + "...");
 
         boolean vitoria = Math.random() < 0.5;
         if (vitoria) {
-            out.println("Você venceu a batalha contra o reino " + getNome());
+            out.println("\nVocê venceu a batalha contra o reino " + getNome());
         } else {
-            out.println("Você perdeu a batalha contra o reino " + getNome());
+            out.println("\nVocê perdeu a batalha contra o reino " + getNome());
         }
     }
 
     private void fazerAlianca() {
-        out.println("Fazendo aliança com o reino " + getNome() + "...");
+        out.println("\nFazendo aliança com o reino " + getNome() + "...");
 
         boolean alianca = Math.random() < 0.5;
         if (alianca) {
-            out.println("O reino " + getNome() + " aceitou realizar uma aliança com seu reino!");
+            out.println("\nO reino " + getNome() + " aceitou realizar uma aliança com seu reino!");
         } else {
-            out.println("O reino " + getNome() + " não aceitou realizar uma aliança com seu reino!");
+            out.println("\nO reino " + getNome() + " não aceitou realizar uma aliança com seu reino!");
         }
     }
 
     private void coletarRecursos(Reino reino) {
-        out.println("Coletando recursos do reino " + getNome() + "...");
+        out.println("\nColetando recursos do reino " + getNome() + "...");
 
         int recursos = getRecursos();
         reino.setRecursos(reino.getRecursos() + getRecursos());
 
-        out.println("Você coletou " + getRecursos() + " de recursos deste reino!");
+        out.println("\nVocê coletou " + getRecursos() + " de recursos deste reino!");
     }
 }

@@ -23,9 +23,9 @@ public class Mapa {
     public void abrirMapa(Reino reino) {
         Utils ut = new Utils(scanner);
 
-        ut.exibirTextoPausado("Explorando o mapa...");
+        ut.exibirTextoPausado("\nExplorando o mapa...\n");
 
-        out.println("\nReinos disponíveis:");
+        ut.exibirTextoPausado("\nReinos disponíveis:\n");
         for (int i = 0; i < reinos.size(); i++) {
             out.println((i+1) + ". " + reinos.get(i).getNome());
         }
@@ -36,9 +36,9 @@ public class Mapa {
         if (opcaoMapa >= 1 && opcaoMapa <= reinos.size()) {
             reinos.get(opcaoMapa - 1).interagirReino(reino);
         } else if (opcaoMapa == 0) {
-            out.println("Voltando ao menu principal...");
+            ut.exibirTextoPausado("\nVoltando ao menu principal...\n");
         } else {
-            out.println("Opção inválida. Por favor, escolha uma opção válida.");
+            out.println("\nOpção inválida. Por favor, escolha uma opção válida.");
         }
     }
 }

@@ -5,6 +5,7 @@ import com.territorio.Edificio;
 import com.territorio.Reino;
 import com.utils.Utils;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import static java.lang.System.*;
 
@@ -39,39 +40,7 @@ public class Menu {
                     mapa.abrirMapa(player.getReino());
                     break;
                 case 2:
-                    int opcaoReino = 0;
-
-                    while (opcaoReino != 0) {
-                        out.println("\n**************  ANALISAR REINO  **************");
-                        out.println("1. Verificar Recursos");
-                        out.println("2. Verificar População");
-                        out.println("3. Varificar Edifícios");
-                        out.println("0. Voltar");
-
-                        opcaoReino = ut.gerarPerguntaInt("Escolha uma opção: ");
-
-                        switch (opcaoReino) {
-                            case 1:
-                                out.println("\nRecursos disponíveis:");
-                                out.println("Ouro: " + player.getReino().getRecursos());
-                                break;
-                            case 2:
-                                out.println("\nPopulação atual:");
-                                out.println(player.getReino().getTropas() + "/" + player.getReino().getPopulacao());
-                                break;
-                            case 3:
-                                out.println("\nEdifícios:");
-                                for (Edificio edificio : player.getReino().getEdificios()) {
-                                    out.println(edificio);
-                                }
-                                break;
-                            case 0:
-                                out.println("\nVoltando ao menu...");
-                                break;
-                            default:
-                                out.println("\nOpção inválida. Por favor, escolha uma opção válida.");
-                        }
-                    }
+                    analizarReino();
                     break;
                 case 3:
                     Edificio edificio = new Edificio();
@@ -83,7 +52,64 @@ public class Menu {
                     exit(0);
                     break;
                 default:
-                    out.println("Opção inválida. Por favor, escolha uma opção válida.");
+                    out.println("\nOpção inválida. Por favor, escolha uma opção válida.");
+            }
+        }
+    }
+
+    private void analizarReino() {
+        Utils ut = new Utils(scanner);
+        Mensagens msg = new Mensagens();
+
+        while (true) {
+            out.println("\n**************  ANALISAR REINO  **************");
+            out.println("1. Verificar Recursos");
+            out.println("2. Verificar População");
+            out.println("3. Verificar Edifícios");
+            out.println("0. Voltar");
+
+            int opcaoReino = ut.gerarPerguntaInt("Escolha uma opção: ");
+
+            switch (opcaoReino) {
+                case 1:
+                    ut.exibirTextoPausado("\nRecursos disponíveis:");
+                    ut.exibirTextoPausado("\n- Ouro: " + player.getReino().getRecursos() + "\n");
+                    break;
+                case 2:
+                    ut.exibirTextoPausado("\nPopulação atual:");
+                    int populacao = player.getReino().getTropas().toArray().length;
+                    ut.exibirTextoPausado("\n- " + populacao + "/" + player.getReino().getPopulacao() + "\n");
+                    break;
+                case 3:
+                    ut.exibirTextoPausado("\nEdifícios:");
+                    if (player.getReino().getEdificios().toArray().length == 0) {
+                        ut.exibirTextoPausado("\n- Seu reino ainda não possui edifícios!\n");
+                    } else {
+                        int quarteis = 0;
+                        int minasDeOuro = 0;
+                        int torresDeDefesa = 0;
+
+                        for (Edificio edificio : player.getReino().getEdificios()) {
+                            if (edificio.getNome().equalsIgnoreCase("Quartel")) {
+                                quarteis++;
+                            } else if (edificio.getNome().equalsIgnoreCase("Mina de Ouro")) {
+                                minasDeOuro++;
+                            } else {
+                                torresDeDefesa++;
+                            }
+                        }
+
+                        ut.exibirTextoPausado("\n- " + quarteis + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.quartel." + (quarteis == 1 ? "singular" : "plural"))));
+                        ut.exibirTextoPausado("\n- " + minasDeOuro + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.minadeouro." + (minasDeOuro == 1 ? "singular" : "plural"))));
+                        ut.exibirTextoPausado("\n- " + torresDeDefesa + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.torrededefesa." + (torresDeDefesa == 1 ? "singular" : "plural"))));
+                        out.println();
+                    }
+                    break;
+                case 0:
+                    ut.exibirTextoPausado("\nVoltando ao menu...\n");
+                    return;
+                default:
+                    out.println("\nOpção inválida. Por favor, escolha uma opção válida.");
             }
         }
     }

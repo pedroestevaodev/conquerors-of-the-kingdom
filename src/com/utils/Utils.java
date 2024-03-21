@@ -53,7 +53,7 @@ public class Utils {
     public void exibirTextoPausado(@NotNull String texto) {
         for (char c : texto.toCharArray()) {
             out.print(c);
-            textoPausado(0);
+            textoPausado(50);
         }
     }
 }

@@ -35,7 +35,11 @@ public class Mapa {
 
         out.println("\n******************  REINOS  ******************");
         for (int i = 0; i < getReinos().size(); i++) {
-            out.println((i+1) + ". " + getReinos().get(i).getNome());
+            if (getPlayer().getReino().getAliados().contains(getReinos().get(i))) {
+                out.println((i+1) + ". " + getReinos().get(i).getNome() + " [Reino Aliado]");
+            } else {
+                out.println((i+1) + ". " + getReinos().get(i).getNome());
+            }
         }
         out.println("0. Voltar");
 

@@ -3,6 +3,7 @@ package com.exercito;
 import com.jogo.Mensagens;
 import com.territorio.Reino;
 import com.utils.Utils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Scanner;
 
@@ -68,6 +69,7 @@ public class Tropa {
 
         while (true) {
             out.println("\n*************  EXPANDIR TROPAS  **************");
+            reino.visualizadorInformacoes();
             out.println("1. Arqueiro - 60 de ouro (Força: 20 - Defesa: 15)");
             out.println("2. Cavaleiro - 100 de ouro (Força: 50 - Defesa: 40)");
             out.println("3. Lanceiro - 40 de ouro (Força: 10 - Defesa: 7)");
@@ -103,7 +105,7 @@ public class Tropa {
                     }
                     break;
                 case 3:
-                    Tropa lanceiro = new Tropa("Lanceiro", 40, 10, 200, 7);
+                    Tropa lanceiro = new Tropa("Lanceiro", 40, 200, 10, 7);
 
                     if (reino.getRecursos() >= lanceiro.getCusto()) {
                         ut.exibirTextoPausado("\nContratando Lanceiro...");
@@ -127,9 +129,29 @@ public class Tropa {
     public void treinar(Reino reino) {
         Utils ut = new Utils(scanner);
 
+        if (reino.getTropas().isEmpty()) {
+            ut.exibirTextoPausado("\nSeu reino não possui tropas para poder treinar. Que tal contratar alguns guerreiros?\n");
+            return;
+        }
+
+        int arqueiros = 0;
+        int cavaleiros = 0;
+        int lanceiros = 0;
+
+        for (Tropa tropa : reino.getTropas()) {
+            if (tropa.getNome().equalsIgnoreCase("Arqueiro")) {
+                arqueiros++;
+            } else if (tropa.getNome().equalsIgnoreCase("Cavaleiro")) {
+                cavaleiros++;
+            } else {
+                lanceiros++;
+            }
+        }
+
         while (true) {
             out.println("\n**************  TREINAR TROPAS  **************");
-            out.println("[O treinamento aumentará a força em +32.8% e a defesa em +40%]");
+            reino.visualizadorInformacoes();
+            out.println("[O treinamento aumentará a força em +32.8% e a defesa em +75%]");
             out.println("1. Arqueiros - 100 de ouro");
             out.println("2. Cavaleiros - 350 de ouro");
             out.println("3. Lanceiros - 200 de ouro");
@@ -142,12 +164,21 @@ public class Tropa {
                 case 1:
                     Tropa arqueiro = new Tropa("Arqueiro", 60, 100, 20, 15);
 
+                    if (arqueiros == 0) {
+                        ut.exibirTextoPausado("\nSeu reino não possui arqueiros para poder treinar. Que tal contratar alguns?\n");
+                        return;
+                    }
+
+                    if (reino.getPopulacao() == reino.getTropas().size()) {
+                        ut.exibirTextoPausado("\nSeu reino atingiu o limite máximo de habitantes. Que tal construir alguns edifícios?\n");
+                    }
+
                     if (reino.getRecursos() >= arqueiro.getCustoTreinamento()) {
                         ut.exibirTextoPausado("\nIniciando treinamento dos Arqueiros...");
                         for (Tropa tropa : reino.getTropas()) {
                             if (tropa.getNome().equalsIgnoreCase("Arqueiro")) {
                                 tropa.setForca((int) (tropa.getForca() * 1.328));
-                                tropa.setDefesa((int) (tropa.getDefesa() * 1.40));
+                                tropa.setDefesa((int) (tropa.getDefesa() * 1.50));
                             }
                         }
                         reino.setRecursos(reino.getRecursos() - arqueiro.getCustoTreinamento());
@@ -160,12 +191,21 @@ public class Tropa {
                 case 2:
                     Tropa cavaleiro = new Tropa("Cavaleiro", 100, 350, 50, 40);
 
+                    if (cavaleiros == 0) {
+                        ut.exibirTextoPausado("\nSeu reino não possui cavaleiros para poder treinar. Que tal contratar alguns?\n");
+                        return;
+                    }
+
+                    if (reino.getPopulacao() == reino.getTropas().size()) {
+                        ut.exibirTextoPausado("\nSeu reino atingiu o limite máximo de habitantes. Que tal construir alguns edifícios?\n");
+                    }
+
                     if (reino.getRecursos() >= cavaleiro.getCustoTreinamento()) {
                         ut.exibirTextoPausado("\nIniciando treinamento dos Cavaleiros...");
                         for (Tropa tropa : reino.getTropas()) {
                             if (tropa.getNome().equalsIgnoreCase("Cavaleiro")) {
                                 tropa.setForca((int) (tropa.getForca() * 1.328));
-                                tropa.setDefesa((int) (tropa.getDefesa() * 1.40));
+                                tropa.setDefesa((int) (tropa.getDefesa() * 1.50));
                             }
                         }
                         reino.setRecursos(reino.getRecursos() - cavaleiro.getCustoTreinamento());
@@ -178,12 +218,21 @@ public class Tropa {
                 case 3:
                     Tropa lanceiro = new Tropa("Lanceiro", 40, 200, 10, 7);
 
+                    if (lanceiros == 0) {
+                        ut.exibirTextoPausado("\nSeu reino não possui lanceiros para poder treinar. Que tal contratar alguns?\n");
+                        return;
+                    }
+
+                    if (reino.getPopulacao() == reino.getTropas().size()) {
+                        ut.exibirTextoPausado("\nSeu reino atingiu o limite máximo de habitantes. Que tal construir alguns edifícios?\n");
+                    }
+
                     if (reino.getRecursos() >= lanceiro.getCustoTreinamento()) {
                         ut.exibirTextoPausado("\nIniciando treinamento dos Lanceiros...");
                         for (Tropa tropa : reino.getTropas()) {
                             if (tropa.getNome().equalsIgnoreCase("Lanceiro")) {
                                 tropa.setForca((int) (tropa.getForca() * 1.328));
-                                tropa.setDefesa((int) (tropa.getDefesa() * 1.40));
+                                tropa.setDefesa((int) (tropa.getDefesa() * 1.50));
                             }
                         }
                         reino.setRecursos(reino.getRecursos() - lanceiro.getCustoTreinamento());
@@ -198,7 +247,7 @@ public class Tropa {
                         ut.exibirTextoPausado("\nIniciando treinamento das Tropas...");
                         for (Tropa tropa : reino.getTropas()) {
                             tropa.setForca((int) (tropa.getForca() * 1.328));
-                            tropa.setDefesa((int) (tropa.getDefesa() * 1.40));
+                            tropa.setDefesa((int) (tropa.getDefesa() * 1.50));
                         }
                         reino.setRecursos(reino.getRecursos() - 800);
                         reino.atualizaForcaDefesaReino();
@@ -216,7 +265,7 @@ public class Tropa {
         }
     }
 
-    public void listarTropas(Reino reino) {
+    public void listarTropas(@NotNull Reino reino) {
         Utils ut = new Utils(scanner);
         Mensagens msg = new Mensagens();
 

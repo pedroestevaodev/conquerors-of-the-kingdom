@@ -105,29 +105,35 @@ public class Reino {
     public void interagirReino(Player player) {
         Utils ut = new Utils(scanner);
 
-        out.println("\n****************  " + getNome() + "  *****************");
-        out.println("1. Batalhar");
-        out.println("2. Fazer Aliança");
-        out.println("3. Coletar Recursos");
-        out.println("0. Voltar");
+        while (true) {
+            if (player.getReino().getAliados().contains(this)) {
+                out.println("\n************  " + getNome() + " [ALIADO]  ************");
+            } else {
+                out.println("\n****************  " + getNome() + "  *****************");
+            }
+            out.println("1. Batalhar");
+            out.println("2. Fazer Aliança");
+            out.println("3. Coletar Recursos");
+            out.println("0. Voltar");
 
-        int opcaoInteragir = ut.gerarPerguntaInt("Escolha uma ação: ");
+            int opcaoInteragir = ut.gerarPerguntaInt("Escolha uma ação: ");
 
-        switch (opcaoInteragir) {
-            case 1:
-                batalhar(player);
-                break;
-            case 2:
-                fazerAlianca(player);
-                break;
-            case 3:
-                coletarRecursos(player);
-                break;
-            case 0:
-                out.println("\nVoltando ao mapa...");
-                break;
-            default:
-                out.println("\nOpção inválida. Por favor, escolha uma opção válida.");
+            switch (opcaoInteragir) {
+                case 1:
+                    batalhar(player);
+                    break;
+                case 2:
+                    fazerAlianca(player);
+                    break;
+                case 3:
+                    coletarRecursos(player.getReino(), this);
+                    break;
+                case 0:
+                    out.println("\nVoltando ao mapa...");
+                    return;
+                default:
+                    out.println("\nOpção inválida. Por favor, escolha uma opção válida.");
+            }
         }
     }
 
@@ -140,6 +146,15 @@ public class Reino {
         if (player.getReino().getDominados().contains(this)) {
             ut.exibirTextoPausado("\nVocê já derrotou este reino. Não se esqueça que a sede por destruição pode ser sua ruina...\n");
             return;
+        }
+
+        if (player.getReino().getAliados().contains(this)) {
+            out.println();
+            String perguntaGuerraAliado = ut.validarInfo("Este reino atualmente é seu aliado, tem certeza que deseja traí-lo? (sim ou nao)", "Por favor, digite 'sim' ou 'nao'.", valor -> valor.equalsIgnoreCase("sim") || valor.equalsIgnoreCase("nao"));
+
+            if (perguntaGuerraAliado.equalsIgnoreCase("nao")) {
+                return;
+            }
         }
 
         ut.limparPrompt();
@@ -159,6 +174,10 @@ public class Reino {
         ut.exibirTextoPausado("- Recursos: " + player.getReino().getRecursos() + " de ouro\n");
         ut.exibirTextoPausado("= [Tropas]");
         tropas.listarTropas(player.getReino());
+        for (Reino reino : player.getReino().getAliados()) {
+            ut.exibirTextoPausado("= [Tropas aliadas do Reino " + reino.getNome() + "]");
+            tropas.listarTropas(reino);
+        }
         out.println("\n");
 
         ut.exibirTextoPausado("[Reino " + getNome() + "]\n");
@@ -166,6 +185,10 @@ public class Reino {
         ut.exibirTextoPausado("- Defesa: " + getForcaDefesa().getDefesa() + "\n");
         ut.exibirTextoPausado("- Recursos: " + getRecursos() + " de ouro\n");
         ut.exibirTextoPausado("= [Tropas]");
+        for (Reino reino : getAliados()) {
+            ut.exibirTextoPausado("= [Tropas aliadas do Reino " + reino.getNome() + "]");
+            tropas.listarTropas(reino);
+        }
         tropas.listarTropas(this);
 
         ut.exibirTextoPausado("\nO campo de batalha foi preparado. A tensão reina soberana...");
@@ -208,20 +231,13 @@ public class Reino {
         int resultadoBatalha = random.nextInt(forcaAtaquePlayer + forcaAtaqueInimigo);
         if (resultadoBatalha < forcaAtaquePlayer) {
             ut.exibirTextoPausado("\nSeu reino foi vitorioso!");
-            ut.exibirTextoPausado("\nAos vencedores os espólios...");
-            ut.exibirTextoPausado("\nSeu reino coletou os recursos do reino de " + getNome() + "...");
-            player.getReino().setRecursos(player.getReino().getRecursos() + getRecursos());
-            setRecursos(0);
-            ut.exibirTextoPausado("\nVocê recebeu " + getRecursos() + " de ouro...");
             player.getReino().getDominados().add(this);
+            coletarRecursos(player.getReino(), this);
             ut.exibirTextoPausado("\nO reino " + getNome() + " agora está na lista de reinos derrotados. Agora você poderá coletar recursos dele quando quiser...\n");
         } else if (resultadoBatalha < forcaAtaquePlayer + forcaAtaqueInimigo) {
             ut.exibirTextoPausado("\nSeu reino sucumbiu ao inimigo!");
-            ut.exibirTextoPausado("\nAos vencedores os espólios...");
-            int recursosPerdidos = (int) (player.getReino().getRecursos() * 0.75);
-            player.getReino().setRecursos(player.getReino().getRecursos() - recursosPerdidos);
-            setRecursos(getRecursos() + recursosPerdidos);
-            ut.exibirTextoPausado("\nSeu reino perdeu " + recursosPerdidos + " de ouro para o reino de " + getNome() + "...\n");
+            getDominados().add(player.getReino());
+            coletarRecursos(this, player.getReino());
         } else {
             ut.exibirTextoPausado("\nA batalha terminou em empate! Ambos os reinos possuem a mesma força.");
         }
@@ -229,10 +245,11 @@ public class Reino {
 
     private void fazerAlianca(@NotNull Player player) {
         Utils ut = new Utils(scanner);
+        Mensagens msg = new Mensagens();
 
         if (player.getReino().getDominados().contains(this)) {
-            ut.exibirTextoPausado("\nO reino " + getNome() + " foi derrotado por você. Ao realizar uma aliança com ele, você não poderá mais coletar seus recursos, mas poderá contar com a força de seu exército ao seu lado.\n");
-            String perguntaAliancaDominado = ut.validarInfo("Deseja formar uma aliança com este reino? (sim ou nao)", "Por favor, digite 'sim' ou 'nao'.", valor -> valor.equalsIgnoreCase("sim") || valor.equalsIgnoreCase("nao"));
+            ut.exibirTextoPausado("\nO reino " + getNome() + " foi derrotado por você. Ao realizar uma aliança com ele, você não poderá mais coletar seus recursos, mas poderá contar com a força de seu exército ao seu lado.");
+            String perguntaAliancaDominado = ut.validarInfo("\nDeseja formar uma aliança com este reino? (sim ou nao)", "Por favor, digite 'sim' ou 'nao'.", valor -> valor.equalsIgnoreCase("sim") || valor.equalsIgnoreCase("nao"));
 
             if (perguntaAliancaDominado.equalsIgnoreCase("sim")) {
                 player.getReino().getDominados().remove(this);
@@ -241,40 +258,62 @@ public class Reino {
                 getAliados().add(player.getReino());
                 atualizaForcaDefesaReino();
             } else {
-                ut.exibirTextoPausado("\nSeu reino desistiu de fazer uma aliança com o reino " + getNome() + "! Mesmo sabendo que isso poderia enfim trazer paz para ele e seus órfãos...");
+                ut.exibirTextoPausado("\nSeu reino desistiu de fazer uma aliança com o reino " + getNome() + "! Mesmo sabendo que isso poderia enfim trazer paz para ele e seus órfãos...\n");
             }
 
             return;
         }
 
-        ut.exibirTextoPausado("\nSeu reino enviou uma proposta de aliança para o reino de " + getNome() + "...");
+        ut.exibirTextoPausado("\nSeu reino enviou uma proposta de aliança para o reino de " + getNome() + "...\n");
+
+        if (player.getReino().getTropas().isEmpty() && player.getReino().getEdificios().isEmpty()) {
+            ut.exibirTextoPausado(msg.parametrosMensagem(msg.exibirMensagem("mensagem.alianca.none."+player.getGenero()), this.getNome()) + "\n");
+            return;
+        }
 
         boolean alianca = Math.random() < 0.5;
         if (alianca) {
-            ut.exibirTextoPausado("\nO reino " + getNome() + " aceitou realizar uma aliança com seu reino!");
+            ut.exibirTextoPausado("O reino " + getNome() + " aceitou realizar uma aliança com seu reino!\n");
             player.getReino().getDominados().remove(this);
             player.getReino().getAliados().add(this);
             player.getReino().atualizaForcaDefesaReino();
             getAliados().add(player.getReino());
             atualizaForcaDefesaReino();
         } else {
-            ut.exibirTextoPausado("\nO reino " + getNome() + " recusou a proposta de aliança com seu reino! Muitas vezes é melhor continuar sozinho...");
+            ut.exibirTextoPausado("O reino " + getNome() + " recusou a proposta de aliança com seu reino! Muitas vezes é melhor continuar sozinho...\n");
         }
     }
 
-    private void coletarRecursos(@NotNull Player player) {
+    private void coletarRecursos(Reino reinoColeta, Reino reinoPerde) {
         Utils ut = new Utils(scanner);
 
-        if (player.getReino().getAliados().contains(this)) {
-            ut.exibirTextoPausado("\nEste reino é seu aliado, você não pode coletar seus recursos! Nunca se esqueça que a ganância é a ruina do homem...");
+        if (!reinoColeta.getDominados().contains(reinoPerde)) {
+            ut.exibirTextoPausado("\nVocê não pode coletar recursos de um reino que não tenha sido dominado por você...\n");
             return;
         }
 
-        ut.exibirTextoPausado("\nColetando recursos do reino " + getNome() + "...");
-        int recursosColetados = getRecursos();
-        player.getReino().setRecursos(player.getReino().getRecursos() + recursosColetados);
-        setRecursos(0);
-        ut.exibirTextoPausado("\nVocê coletou " + recursosColetados + " de recursos deste reino!\n");
+        if (reinoColeta.getAliados().contains(reinoPerde)) {
+            ut.exibirTextoPausado("\nEste reino é seu aliado, você não pode coletar seus recursos! Nunca se esqueça que a ganância é a ruina do homem...\n");
+            return;
+        }
+
+        ut.exibirTextoPausado("\nAos vencedores os espólios...");
+
+        if (reinoPerde.getRecursos() == 0) {
+            ut.exibirTextoPausado("\nMas infelizmente o reino de " + reinoPerde.getNome() + " não possui recursos para serem coletados...\n");
+
+            if (reinoPerde.getEdificios().contains("Mina de Ouro")) {
+                ut.exibirTextoPausado("Eles não possuem minas de ouro para poderem gerar riqueza. Como ato de misericórdia você pode formar uma aliança com eles para que suas tropas lutem ao seu lado...\n");
+            }
+
+            return;
+        }
+
+        ut.exibirTextoPausado("\nO reino " + reinoColeta.getNome() + " coletou os recursos do reino de " + reinoPerde.getNome() + "...");
+        int recursosColetados = reinoPerde.getRecursos();
+        reinoColeta.setRecursos(reinoColeta.getRecursos() + recursosColetados);
+        reinoPerde.setRecursos(0);
+        ut.exibirTextoPausado("\n" + reinoColeta.getNome() + " recebeu " + recursosColetados + " de ouro...\n");
     }
 
     public void atualizaForcaDefesaReino() {
@@ -294,5 +333,10 @@ public class Reino {
         }
 
         setForcaDefesa(new ForcaDefesa(forcaTotal, defesaTotal));
+    }
+
+    public void visualizadorInformacoes() {
+        out.println("  Ouro: " + getRecursos() + " | Tropas: " + getTropas().toArray().length + "/" + getPopulacao());
+        out.println("**********************************************");
     }
 }

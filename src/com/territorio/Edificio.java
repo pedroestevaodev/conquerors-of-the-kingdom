@@ -47,6 +47,7 @@ public class Edificio {
 
         while (true) {
             out.println("\n***********  CONSTRUIR EDIFÍCIOS  ************");
+            reino.visualizadorInformacoes();
             out.println("1. Quartel - 500 de ouro (Expande o limite de habitantes para +20)");
             out.println("2. Mina de Ouro - 800 de ouro (Garante uma certa quantia de ouro de tempos em tempos)");
             out.println("3. Torre de Defesa - 300 de ouro (Expande o limite de habitantes para +12)");

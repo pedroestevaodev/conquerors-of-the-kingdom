@@ -118,7 +118,7 @@ public class Reino {
                 batalhar(player);
                 break;
             case 2:
-                fazerAlianca();
+                fazerAlianca(player);
                 break;
             case 3:
                 coletarRecursos(player);
@@ -131,11 +131,16 @@ public class Reino {
         }
     }
 
-    private void batalhar(Player player) {
+    private void batalhar(@NotNull Player player) {
         Random random = new Random();
         Utils ut = new Utils(scanner);
         Mensagens msg = new Mensagens();
         Tropa tropas = new Tropa();
+
+        if (player.getReino().getDominados().contains(this)) {
+            ut.exibirTextoPausado("\nVocê já derrotou este reino. Não se esqueça que a sede por destruição pode ser sua ruina...\n");
+            return;
+        }
 
         ut.limparPrompt();
         ut.exibirTextoPausado("Foi declarada guerra e não tem como voltar atrás...\n");
@@ -205,38 +210,71 @@ public class Reino {
             ut.exibirTextoPausado("\nSeu reino foi vitorioso!");
             ut.exibirTextoPausado("\nAos vencedores os espólios...");
             ut.exibirTextoPausado("\nSeu reino coletou os recursos do reino de " + getNome() + "...");
+            player.getReino().setRecursos(player.getReino().getRecursos() + getRecursos());
+            setRecursos(0);
             ut.exibirTextoPausado("\nVocê recebeu " + getRecursos() + " de ouro...");
             player.getReino().getDominados().add(this);
-            ut.exibirTextoPausado("\nO reino " + getNome() + " agora está na lista de reinos derrotados. Agora você poderá coletar recursos dele quando quiser...");
+            ut.exibirTextoPausado("\nO reino " + getNome() + " agora está na lista de reinos derrotados. Agora você poderá coletar recursos dele quando quiser...\n");
         } else if (resultadoBatalha < forcaAtaquePlayer + forcaAtaqueInimigo) {
             ut.exibirTextoPausado("\nSeu reino sucumbiu ao inimigo!");
             ut.exibirTextoPausado("\nAos vencedores os espólios...");
             int recursosPerdidos = (int) (player.getReino().getRecursos() * 0.75);
             player.getReino().setRecursos(player.getReino().getRecursos() - recursosPerdidos);
-            ut.exibirTextoPausado("\nSeu reino perdeu " + recursosPerdidos + " de ouro para o reino de " + getNome() + "...");
+            setRecursos(getRecursos() + recursosPerdidos);
+            ut.exibirTextoPausado("\nSeu reino perdeu " + recursosPerdidos + " de ouro para o reino de " + getNome() + "...\n");
         } else {
             ut.exibirTextoPausado("\nA batalha terminou em empate! Ambos os reinos possuem a mesma força.");
         }
     }
 
-    private void fazerAlianca() {
-        out.println("\nFazendo aliança com o reino " + getNome() + "...");
+    private void fazerAlianca(@NotNull Player player) {
+        Utils ut = new Utils(scanner);
+
+        if (player.getReino().getDominados().contains(this)) {
+            ut.exibirTextoPausado("\nO reino " + getNome() + " foi derrotado por você. Ao realizar uma aliança com ele, você não poderá mais coletar seus recursos, mas poderá contar com a força de seu exército ao seu lado.\n");
+            String perguntaAliancaDominado = ut.validarInfo("Deseja formar uma aliança com este reino? (sim ou nao)", "Por favor, digite 'sim' ou 'nao'.", valor -> valor.equalsIgnoreCase("sim") || valor.equalsIgnoreCase("nao"));
+
+            if (perguntaAliancaDominado.equalsIgnoreCase("sim")) {
+                player.getReino().getDominados().remove(this);
+                player.getReino().getAliados().add(this);
+                player.getReino().atualizaForcaDefesaReino();
+                getAliados().add(player.getReino());
+                atualizaForcaDefesaReino();
+            } else {
+                ut.exibirTextoPausado("\nSeu reino desistiu de fazer uma aliança com o reino " + getNome() + "! Mesmo sabendo que isso poderia enfim trazer paz para ele e seus órfãos...");
+            }
+
+            return;
+        }
+
+        ut.exibirTextoPausado("\nSeu reino enviou uma proposta de aliança para o reino de " + getNome() + "...");
 
         boolean alianca = Math.random() < 0.5;
         if (alianca) {
-            out.println("\nO reino " + getNome() + " aceitou realizar uma aliança com seu reino!");
+            ut.exibirTextoPausado("\nO reino " + getNome() + " aceitou realizar uma aliança com seu reino!");
+            player.getReino().getDominados().remove(this);
+            player.getReino().getAliados().add(this);
+            player.getReino().atualizaForcaDefesaReino();
+            getAliados().add(player.getReino());
+            atualizaForcaDefesaReino();
         } else {
-            out.println("\nO reino " + getNome() + " não aceitou realizar uma aliança com seu reino!");
+            ut.exibirTextoPausado("\nO reino " + getNome() + " recusou a proposta de aliança com seu reino! Muitas vezes é melhor continuar sozinho...");
         }
     }
 
     private void coletarRecursos(@NotNull Player player) {
-        out.println("\nColetando recursos do reino " + getNome() + "...");
+        Utils ut = new Utils(scanner);
 
-        int recursos = getRecursos();
-        player.getReino().setRecursos(player.getReino().getRecursos() + getRecursos());
+        if (player.getReino().getAliados().contains(this)) {
+            ut.exibirTextoPausado("\nEste reino é seu aliado, você não pode coletar seus recursos! Nunca se esqueça que a ganância é a ruina do homem...");
+            return;
+        }
 
-        out.println("\nVocê coletou " + getRecursos() + " de recursos deste reino!");
+        ut.exibirTextoPausado("\nColetando recursos do reino " + getNome() + "...");
+        int recursosColetados = getRecursos();
+        player.getReino().setRecursos(player.getReino().getRecursos() + recursosColetados);
+        setRecursos(0);
+        ut.exibirTextoPausado("\nVocê coletou " + recursosColetados + " de recursos deste reino!\n");
     }
 
     public void atualizaForcaDefesaReino() {
@@ -246,6 +284,13 @@ public class Reino {
         for (Tropa tropa : getTropas()) {
             forcaTotal += tropa.getForca();
             defesaTotal += tropa.getDefesa();
+        }
+
+        for (Reino reino : getAliados()) {
+            for (Tropa tropa : reino.getTropas()) {
+                forcaTotal += tropa.getForca();
+                defesaTotal += tropa.getDefesa();
+            }
         }
 
         setForcaDefesa(new ForcaDefesa(forcaTotal, defesaTotal));

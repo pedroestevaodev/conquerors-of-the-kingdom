@@ -5,9 +5,10 @@ import com.player.Player;
 import com.territorio.Edificio;
 import com.territorio.Reino;
 import com.utils.Utils;
+
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
+
 import static java.lang.System.*;
 
 public class Menu {
@@ -38,7 +39,7 @@ public class Menu {
             switch (menuOpcao) {
                 case 1:
                     Mapa mapa = new Mapa(player, reinos);
-                    mapa.abrirMapa(player.getReino());
+                    mapa.abrirMapa();
                     break;
                 case 2:
                     analizarReino();
@@ -87,24 +88,8 @@ public class Menu {
                     if (player.getReino().getEdificios().toArray().length == 0) {
                         ut.exibirTextoPausado("\n- Seu reino ainda não possui edifícios!\n");
                     } else {
-                        int quarteis = 0;
-                        int minasDeOuro = 0;
-                        int torresDeDefesa = 0;
-
-                        for (Edificio edificio : player.getReino().getEdificios()) {
-                            if (edificio.getNome().equalsIgnoreCase("Quartel")) {
-                                quarteis++;
-                            } else if (edificio.getNome().equalsIgnoreCase("Mina de Ouro")) {
-                                minasDeOuro++;
-                            } else {
-                                torresDeDefesa++;
-                            }
-                        }
-
-                        ut.exibirTextoPausado("\n- " + quarteis + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.quartel." + (quarteis == 1 ? "singular" : "plural"))));
-                        ut.exibirTextoPausado("\n- " + minasDeOuro + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.minadeouro." + (minasDeOuro == 1 ? "singular" : "plural"))));
-                        ut.exibirTextoPausado("\n- " + torresDeDefesa + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.torrededefesa." + (torresDeDefesa == 1 ? "singular" : "plural"))));
-                        out.println();
+                        Edificio edificios = new Edificio();
+                        edificios.listarEdificios(player.getReino());
                     }
                     break;
                 case 0:
@@ -142,24 +127,8 @@ public class Menu {
                     if (player.getReino().getTropas().toArray().length == 0) {
                         ut.exibirTextoPausado("\n- Seu reino ainda não possui tropas em serviço! Que tal contratar?\n");
                     } else {
-                        int arqueiros = 0;
-                        int cavaleiros = 0;
-                        int lanceiros = 0;
-
-                        for (Tropa tropa : player.getReino().getTropas()) {
-                            if (tropa.getNome().equalsIgnoreCase("Arqueiro")) {
-                                arqueiros++;
-                            } else if (tropa.getNome().equalsIgnoreCase("Cavaleiro")) {
-                                cavaleiros++;
-                            } else {
-                                lanceiros++;
-                            }
-                        }
-
-                        ut.exibirTextoPausado("\n- " + arqueiros + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.arqueiro." + (arqueiros == 1 ? "singular" : "plural"))));
-                        ut.exibirTextoPausado("\n- " + cavaleiros + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.cavaleiro." + (cavaleiros == 1 ? "singular" : "plural"))));
-                        ut.exibirTextoPausado("\n- " + lanceiros + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.lanceiro." + (lanceiros == 1 ? "singular" : "plural"))));
-                        out.println();
+                        Tropa tropas = new Tropa();
+                        tropas.listarTropas(player.getReino());
                     }
                     break;
                 case 3:

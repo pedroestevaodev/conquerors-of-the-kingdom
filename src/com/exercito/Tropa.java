@@ -1,10 +1,13 @@
 package com.exercito;
 
-import com.territorio.Edificio;
+import com.jogo.Mensagens;
 import com.territorio.Reino;
 import com.utils.Utils;
+
 import java.util.Scanner;
-import static java.lang.System.*;
+
+import static java.lang.System.in;
+import static java.lang.System.out;
 
 public class Tropa {
     private String nome;
@@ -80,7 +83,7 @@ public class Tropa {
                         ut.exibirTextoPausado("\nContratando Arqueiro...");
                         reino.getTropas().add(arqueiro);
                         reino.setRecursos(reino.getRecursos() - arqueiro.getCusto());
-                        reino.atualizaForcaDefesaReino(reino);
+                        reino.atualizaForcaDefesaReino();
                         ut.exibirTextoPausado("\nArqueiro contratado com sucesso!\n");
                     } else {
                         ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta contratação...\n");
@@ -93,7 +96,7 @@ public class Tropa {
                         ut.exibirTextoPausado("\nContratando Cavaleiro...");
                         reino.getTropas().add(cavaleiro);
                         reino.setRecursos(reino.getRecursos() - cavaleiro.getCusto());
-                        reino.atualizaForcaDefesaReino(reino);
+                        reino.atualizaForcaDefesaReino();
                         ut.exibirTextoPausado("\nCavaleiro contratado com sucesso!\n");
                     } else {
                         ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta contratação...\n");
@@ -106,7 +109,7 @@ public class Tropa {
                         ut.exibirTextoPausado("\nContratando Lanceiro...");
                         reino.getTropas().add(lanceiro);
                         reino.setRecursos(reino.getRecursos() - lanceiro.getCusto());
-                        reino.atualizaForcaDefesaReino(reino);
+                        reino.atualizaForcaDefesaReino();
                         ut.exibirTextoPausado("\nLanceiro contratado com sucesso!\n");
                     } else {
                         ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta contratação...\n");
@@ -148,7 +151,7 @@ public class Tropa {
                             }
                         }
                         reino.setRecursos(reino.getRecursos() - arqueiro.getCustoTreinamento());
-                        reino.atualizaForcaDefesaReino(reino);
+                        reino.atualizaForcaDefesaReino();
                         ut.exibirTextoPausado("\nArqueiros treinaram com sucesso!\n");
                     } else {
                         ut.exibirTextoPausado("\nInfelizmente você não tem recursos para treinar essa classe...\n");
@@ -166,7 +169,7 @@ public class Tropa {
                             }
                         }
                         reino.setRecursos(reino.getRecursos() - cavaleiro.getCustoTreinamento());
-                        reino.atualizaForcaDefesaReino(reino);
+                        reino.atualizaForcaDefesaReino();
                         ut.exibirTextoPausado("\nCavaleiros treinaram com sucesso!\n");
                     } else {
                         ut.exibirTextoPausado("\nInfelizmente você não tem recursos para treinar essa classe...\n");
@@ -184,7 +187,7 @@ public class Tropa {
                             }
                         }
                         reino.setRecursos(reino.getRecursos() - lanceiro.getCustoTreinamento());
-                        reino.atualizaForcaDefesaReino(reino);
+                        reino.atualizaForcaDefesaReino();
                         ut.exibirTextoPausado("\nLanceiros treinaram com sucesso!\n");
                     } else {
                         ut.exibirTextoPausado("\nInfelizmente você não tem recursos para treinar essa classe...\n");
@@ -198,7 +201,7 @@ public class Tropa {
                             tropa.setDefesa((int) (tropa.getDefesa() * 1.40));
                         }
                         reino.setRecursos(reino.getRecursos() - 800);
-                        reino.atualizaForcaDefesaReino(reino);
+                        reino.atualizaForcaDefesaReino();
                         ut.exibirTextoPausado("\nAs Tropas treinaram com sucesso!\n");
                     } else {
                         ut.exibirTextoPausado("\nInfelizmente você não tem recursos para treinar suas tropas...\n");
@@ -211,5 +214,29 @@ public class Tropa {
                     out.println("\nOpção inválida. Por favor, escolha uma opção válida.");
             }
         }
+    }
+
+    public void listarTropas(Reino reino) {
+        Utils ut = new Utils(scanner);
+        Mensagens msg = new Mensagens();
+
+        int arqueiros = 0;
+        int cavaleiros = 0;
+        int lanceiros = 0;
+
+        for (Tropa tropa : reino.getTropas()) {
+            if (tropa.getNome().equalsIgnoreCase("Arqueiro")) {
+                arqueiros++;
+            } else if (tropa.getNome().equalsIgnoreCase("Cavaleiro")) {
+                cavaleiros++;
+            } else {
+                lanceiros++;
+            }
+        }
+
+        ut.exibirTextoPausado("\n- " + arqueiros + " " + (msg.exibirMensagem("mensagem.listagemtropas.arqueiro." + (arqueiros == 1 ? "singular" : "plural"))));
+        ut.exibirTextoPausado("\n- " + cavaleiros + " " + (msg.exibirMensagem("mensagem.listagemtropas.cavaleiro." + (cavaleiros == 1 ? "singular" : "plural"))));
+        ut.exibirTextoPausado("\n- " + lanceiros + " " + (msg.exibirMensagem("mensagem.listagemtropas.lanceiro." + (lanceiros == 1 ? "singular" : "plural"))));
+        out.println();
     }
 }

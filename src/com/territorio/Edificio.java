@@ -1,12 +1,14 @@
 package com.territorio;
 
+import com.jogo.Mensagens;
 import com.utils.Utils;
 
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static java.lang.System.*;
+import static java.lang.System.in;
+import static java.lang.System.out;
 
 public class Edificio {
     private String nome;
@@ -110,5 +112,29 @@ public class Edificio {
                 reino.setRecursos(reino.getRecursos() + 1);
             }
         }, 3500, 3500);
+    }
+
+    public void listarEdificios(Reino reino) {
+        Utils ut = new Utils(scanner);
+        Mensagens msg = new Mensagens();
+
+        int quarteis = 0;
+        int minasDeOuro = 0;
+        int torresDeDefesa = 0;
+
+        for (Edificio edificio : reino.getEdificios()) {
+            if (edificio.getNome().equalsIgnoreCase("Quartel")) {
+                quarteis++;
+            } else if (edificio.getNome().equalsIgnoreCase("Mina de Ouro")) {
+                minasDeOuro++;
+            } else {
+                torresDeDefesa++;
+            }
+        }
+
+        ut.exibirTextoPausado("\n- " + quarteis + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.quartel." + (quarteis == 1 ? "singular" : "plural"))));
+        ut.exibirTextoPausado("\n- " + minasDeOuro + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.minadeouro." + (minasDeOuro == 1 ? "singular" : "plural"))));
+        ut.exibirTextoPausado("\n- " + torresDeDefesa + " " + (msg.exibirMensagem("mensagem.listagemconstrucoes.torrededefesa." + (torresDeDefesa == 1 ? "singular" : "plural"))));
+        out.println();
     }
 }

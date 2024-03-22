@@ -20,21 +20,29 @@ public class Mapa {
         this.scanner = new Scanner(in);
     }
 
-    public void abrirMapa(Reino reino) {
+    public Player getPlayer() {
+        return player;
+    }
+
+    public List<Reino> getReinos() {
+        return reinos;
+    }
+
+    public void abrirMapa() {
         Utils ut = new Utils(scanner);
 
         ut.exibirTextoPausado("\nExplorando o mapa...\n");
 
         out.println("\n******************  REINOS  ******************");
-        for (int i = 0; i < reinos.size(); i++) {
-            out.println((i+1) + ". " + reinos.get(i).getNome());
+        for (int i = 0; i < getReinos().size(); i++) {
+            out.println((i+1) + ". " + getReinos().get(i).getNome());
         }
         out.println("0. Voltar");
 
         int opcaoMapa = ut.gerarPerguntaInt("Escolha um reino para interagir: ");
 
-        if (opcaoMapa >= 1 && opcaoMapa <= reinos.size()) {
-            reinos.get(opcaoMapa - 1).interagirReino(reino);
+        if (opcaoMapa >= 1 && opcaoMapa <= getReinos().size()) {
+            getReinos().get(opcaoMapa - 1).interagirReino(getPlayer());
         } else if (opcaoMapa == 0) {
             ut.exibirTextoPausado("\nVoltando ao menu principal...\n");
         } else {

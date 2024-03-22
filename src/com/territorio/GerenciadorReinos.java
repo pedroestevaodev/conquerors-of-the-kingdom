@@ -49,6 +49,7 @@ public class GerenciadorReinos {
                 tropas.add(gerarTropas());
             }
             reino.setTropas(tropas);
+            reino.atualizaForcaDefesaReino();
 
             reinos.add(reino);
         }

@@ -7,8 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Scanner;
 
-import static java.lang.System.in;
-import static java.lang.System.out;
+import static java.lang.System.*;
 
 public class Tropa {
     private String nome;
@@ -81,15 +80,20 @@ public class Tropa {
                 case 1:
                     Tropa arqueiro = new Tropa("Arqueiro", 60, 100, 20, 15);
 
-                    if (reino.getRecursos() >= arqueiro.getCusto()) {
-                        ut.exibirTextoPausado("\nContratando Arqueiro...");
-                        reino.getTropas().add(arqueiro);
-                        reino.setRecursos(reino.getRecursos() - arqueiro.getCusto());
-                        reino.atualizaForcaDefesaReino();
-                        ut.exibirTextoPausado("\nArqueiro contratado com sucesso!\n");
-                    } else {
-                        ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta contratação...\n");
+                    String perguntaQtdArqueiros = ut.validarInfo("Deseja contratar quantos arqueiros? (1-" + reino.getPopulacao() + ")", "Por favor, informe apenas valores inteiros positivos!", valor -> { try { int quantidade = Integer.parseInt(valor); return quantidade >= 0; } catch (NumberFormatException e) { return false; } } );
+
+                    for (int i = 0; i < perguntaQtdArqueiros; i++) {
+                        if (reino.getRecursos() >= arqueiro.getCusto()) {
+                            ut.exibirTextoPausado("\nContratando Arqueiro...");
+                            reino.getTropas().add(arqueiro);
+                            reino.setRecursos(reino.getRecursos() - arqueiro.getCusto());
+                            reino.atualizaForcaDefesaReino();
+                            ut.exibirTextoPausado("\nArqueiro contratado com sucesso!\n");
+                        } else {
+                            ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta contratação...\n");
+                        }
                     }
+
                     break;
                 case 2:
                     Tropa cavaleiro = new Tropa("Cavaleiro", 100, 350, 50, 40);

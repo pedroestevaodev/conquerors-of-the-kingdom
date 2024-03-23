@@ -24,7 +24,7 @@ public class CriarPlayer {
         out.println("\nBem-vindo(a) ao Conquistadores do Reino!\n");
         String nomePlayer = ut.validarInfo("Por favor, digite seu nome:", "O nome não pode conter números, caracteres especiais ou espaço. Por favor, tente novamente.", valor -> valor.matches("[a-zA-Z]+"));
         out.println();
-        String generoPlayer = ut.validarInfo("Olá, " + nomePlayer + "! Você deseja ser um rei ou uma rainha? (Digite 'rei' ou 'rainha'):", "Por favor, digite 'rei' ou 'rainha'.", valor -> valor.equalsIgnoreCase("rei") || valor.equalsIgnoreCase("rainha"));
+        String generoPlayer = ut.validarInfo("Olá, " + nomePlayer + "! Você deseja ser um rei ou uma rainha? (Digite 'rei' ou 'rainha'):", "Por favor, digite 'rei' ou 'rainha'.", valor -> valor.equalsIgnoreCase("rei") || valor.equalsIgnoreCase("rainha")).toLowerCase();
         out.println();
         String reinoPlayer = ut.gerarPergunta("Ótimo, " + generoPlayer + " " + nomePlayer + "! Agora, qual será o nome do seu reino?");
 
@@ -42,7 +42,7 @@ public class CriarPlayer {
                     nomePlayer = ut.gerarPergunta("Por favor, digite seu nome:");
                     break;
                 case "gênero":
-                    generoPlayer = ut.gerarPergunta("Você deseja ser um rei ou uma rainha? (Digite 'rei' ou 'rainha'):");
+                    generoPlayer = ut.gerarPergunta("Você deseja ser um rei ou uma rainha? (Digite 'rei' ou 'rainha'):").toLowerCase();
                     break;
                 case "reino":
                     reinoPlayer = ut.gerarPergunta("Qual nome você deseja dar para o seu reino?");

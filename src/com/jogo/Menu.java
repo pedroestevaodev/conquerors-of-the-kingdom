@@ -5,16 +5,14 @@ import com.player.Player;
 import com.territorio.Edificio;
 import com.territorio.Reino;
 import com.utils.Utils;
-
 import java.util.List;
 import java.util.Scanner;
-
 import static java.lang.System.*;
 
 public class Menu {
-    private Player player;
-    private List<Reino> reinos;
-    private Scanner scanner;
+    private final Player player;
+    private final List<Reino> reinos;
+    private final Scanner scanner;
 
     public Menu(Player player, List<Reino> reinos) {
         this.player = player;
@@ -118,8 +116,8 @@ public class Menu {
             switch (opcaoReino) {
                 case 1:
                     ut.exibirTextoPausado("\nForça/Defesa do Reino:");
-                    ut.exibirTextoPausado("\n- Força: " + player.getReino().getForcaDefesa().getForca());
-                    ut.exibirTextoPausado("\n- Defesa: " + player.getReino().getForcaDefesa().getDefesa());
+                    ut.exibirTextoPausado("\n- Força: " + player.getReino().getForcaDefesa().forca());
+                    ut.exibirTextoPausado("\n- Defesa: " + player.getReino().getForcaDefesa().defesa());
                     out.println();
                     break;
                 case 2:

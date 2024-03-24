@@ -1,26 +1,21 @@
 package com.jogo;
 
-import com.player.Player;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
-
-import static java.lang.System.*;
+import org.jetbrains.annotations.NotNull;
 
 public class Mensagens {
-    public String parametrosMensagem(String mensagem, String... parametros) {
+    public String parametrosMensagem(@NotNull String mensagem, String @NotNull ... parametros) {
         for (int i = 0; i < parametros.length; i++) {
             mensagem = mensagem.replace("{"+i+"}", parametros[i]);
         }
         return mensagem;
     }
 
-    public String exibirMensagem(String mensagem) {
+    public String exibirMensagem(@NotNull String mensagem) {
         Properties prop = new Properties();
 
         try {
@@ -32,7 +27,7 @@ public class Mensagens {
         }
     }
 
-    public Set<String> obterDados(String nomeArquivo) {
+    public Set<String> obterDados(@NotNull String nomeArquivo) {
         Set<String> nomes = new HashSet<>();
         Properties properties = new Properties();
 
@@ -40,9 +35,7 @@ public class Mensagens {
             properties.load(Mensagens.class.getResourceAsStream(nomeArquivo));
 
             for (String chave : properties.stringPropertyNames()) {
-//                if (chave.equals("nome")) {
-                    nomes.add(properties.getProperty(chave));
-//                }
+                nomes.add(properties.getProperty(chave));
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -5,14 +5,12 @@ import com.exercito.Tropa;
 import com.jogo.Mensagens;
 import com.player.Player;
 import com.utils.Utils;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-
 import static java.lang.System.*;
+import org.jetbrains.annotations.NotNull;
 
 public class Reino {
     private String nome;
@@ -102,7 +100,7 @@ public class Reino {
         this.dominados = dominados;
     }
 
-    public void interagirReino(Player player) {
+    public void interagirReino(@NotNull Player player) {
         Utils ut = new Utils(scanner);
 
         while (true) {
@@ -154,13 +152,15 @@ public class Reino {
 
             if (perguntaGuerraAliado.equalsIgnoreCase("nao")) {
                 return;
+            } else {
+                player.getReino().getAliados().remove(this);
             }
         }
 
         ut.limparPrompt();
         ut.exibirTextoPausado("Foi declarada guerra e não tem como voltar atrás...\n");
 
-        if (player.getReino().getForcaDefesa().getForca() == 0 && player.getReino().getForcaDefesa().getDefesa() == 0) {
+        if (player.getReino().getForcaDefesa().forca() == 0 && player.getReino().getForcaDefesa().defesa() == 0) {
             ut.exibirTextoPausado(msg.parametrosMensagem(msg.exibirMensagem("mensagem.batalha.none."+player.getGenero().toLowerCase()), player.getNome(), getNome()).replace("[BREAK]", "\n") + "\n");
             return;
         }
@@ -169,8 +169,8 @@ public class Reino {
         out.println("\n");
 
         ut.exibirTextoPausado("[Reino " + player.getReino().getNome() + "]\n");
-        ut.exibirTextoPausado("- Força: " + player.getReino().getForcaDefesa().getForca() + "\n");
-        ut.exibirTextoPausado("- Defesa: " + player.getReino().getForcaDefesa().getDefesa() + "\n");
+        ut.exibirTextoPausado("- Força: " + player.getReino().getForcaDefesa().forca() + "\n");
+        ut.exibirTextoPausado("- Defesa: " + player.getReino().getForcaDefesa().defesa() + "\n");
         ut.exibirTextoPausado("- Recursos: " + player.getReino().getRecursos() + " de ouro\n");
         ut.exibirTextoPausado("= [Tropas]");
         tropas.listarTropas(player.getReino());
@@ -181,8 +181,8 @@ public class Reino {
         out.println("\n");
 
         ut.exibirTextoPausado("[Reino " + getNome() + "]\n");
-        ut.exibirTextoPausado("- Força: " + getForcaDefesa().getForca() + "\n");
-        ut.exibirTextoPausado("- Defesa: " + getForcaDefesa().getDefesa() + "\n");
+        ut.exibirTextoPausado("- Força: " + getForcaDefesa().forca() + "\n");
+        ut.exibirTextoPausado("- Defesa: " + getForcaDefesa().defesa() + "\n");
         ut.exibirTextoPausado("- Recursos: " + getRecursos() + " de ouro\n");
         ut.exibirTextoPausado("= [Tropas]");
         for (Reino reino : getAliados()) {
@@ -201,10 +201,10 @@ public class Reino {
             ut.exibirTextoPausado("\nO exército inimigo decidiu tomar a iniciativa. A guerra começou...");
         }
 
-        int forcaJogador = player.getReino().getForcaDefesa().getForca();
-        int forcaInimigo = player.getReino().getForcaDefesa().getForca();
-        int defesaJogador = getForcaDefesa().getDefesa();
-        int defesaInimigo = getForcaDefesa().getDefesa();
+        int forcaJogador = player.getReino().getForcaDefesa().forca();
+        int forcaInimigo = player.getReino().getForcaDefesa().forca();
+        int defesaJogador = getForcaDefesa().defesa();
+        int defesaInimigo = getForcaDefesa().defesa();
 
         if (iniciador) {
             if (forcaJogador > defesaInimigo) {
@@ -222,8 +222,8 @@ public class Reino {
 
         ut.exibirTextoPausado("\nA batalha é ferrenha, mas o destino já estava escrito...");
 
-        int forcaAtaquePlayer = player.getReino().getForcaDefesa().getForca() - getForcaDefesa().getDefesa();
-        int forcaAtaqueInimigo = getForcaDefesa().getForca() - player.getReino().getForcaDefesa().getDefesa();
+        int forcaAtaquePlayer = player.getReino().getForcaDefesa().forca() - getForcaDefesa().defesa();
+        int forcaAtaqueInimigo = getForcaDefesa().forca() - player.getReino().getForcaDefesa().defesa();
 
         if (forcaAtaquePlayer < 0) forcaAtaquePlayer = 0;
         if (forcaAtaqueInimigo < 0) forcaAtaqueInimigo = 0;
@@ -284,7 +284,7 @@ public class Reino {
         }
     }
 
-    private void coletarRecursos(Reino reinoColeta, Reino reinoPerde) {
+    private void coletarRecursos(@NotNull Reino reinoColeta, @NotNull Reino reinoPerde) {
         Utils ut = new Utils(scanner);
 
         if (!reinoColeta.getDominados().contains(reinoPerde)) {
@@ -300,10 +300,19 @@ public class Reino {
         ut.exibirTextoPausado("\nAos vencedores os espólios...");
 
         if (reinoPerde.getRecursos() == 0) {
-            ut.exibirTextoPausado("\nMas infelizmente o reino de " + reinoPerde.getNome() + " não possui recursos para serem coletados...\n");
+            ut.exibirTextoPausado("\nMas infelizmente o reino de " + reinoPerde.getNome() + " não possui recursos para serem coletados...");
 
-            if (reinoPerde.getEdificios().contains("Mina de Ouro")) {
-                ut.exibirTextoPausado("Eles não possuem minas de ouro para poderem gerar riqueza. Como ato de misericórdia você pode formar uma aliança com eles para que suas tropas lutem ao seu lado...\n");
+            int possuiMinasDeOuro = 0;
+            for (Edificio edificio : reinoPerde.getEdificios()) {
+                if (edificio.getNome().equalsIgnoreCase("mina de ouro")) {
+                    possuiMinasDeOuro++;
+                }
+            }
+
+            if (possuiMinasDeOuro == 0) {
+                ut.exibirTextoPausado("\nEles não possuem minas de ouro para poderem gerar riqueza. Como ato de misericórdia você pode formar uma aliança com eles para que suas tropas lutem ao seu lado...\n");
+            } else {
+                ut.exibirTextoPausado("\nMas eles possuem minas de ouro gerando ouro, volte depois para poder coletar mais recursos...\n");
             }
 
             return;
@@ -336,7 +345,9 @@ public class Reino {
     }
 
     public void visualizadorInformacoes() {
-        out.println("  Ouro: " + getRecursos() + " | Tropas: " + getTropas().toArray().length + "/" + getPopulacao());
+        out.print("  Ouro: " + getRecursos());
+        out.print(" | Tropas: " + getTropas().size() + "/" + getPopulacao());
+        out.print(" | Edifícios: " + getEdificios().size() + "\n");
         out.println("**********************************************");
     }
 }

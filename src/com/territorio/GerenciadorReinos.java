@@ -2,10 +2,9 @@ package com.territorio;
 
 import com.exercito.Tropa;
 import com.jogo.Mensagens;
-
 import java.util.*;
-
-import static java.lang.System.out;
+import static java.lang.System.*;
+import org.jetbrains.annotations.NotNull;
 
 public class GerenciadorReinos {
     private static final int NUMERO_MINIMO_REINOS = 3;
@@ -26,6 +25,10 @@ public class GerenciadorReinos {
 
             if (nomesReinos != null && !nomesReinos.isEmpty()) {
                 nomeAleatorio = msg.aleatorizarDados(nomesReinos, random);
+
+                while (existeNomeReino(reinos, nomeAleatorio)) {
+                    nomeAleatorio = msg.aleatorizarDados(nomesReinos, random);
+                }
             } else {
                 out.println("\nNão foi possível carregar os nomes aleatórios para os reinos.");
             }
@@ -57,6 +60,15 @@ public class GerenciadorReinos {
         return reinos;
     }
 
+    private boolean existeNomeReino(@NotNull List<Reino> reinos, @NotNull String nome) {
+        for (Reino reino : reinos) {
+            if (reino.getNome().equals(nome)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private Edificio gerarEdificios() {
         Random random = new Random();
         int tipo = random.nextInt(3);
@@ -81,7 +93,7 @@ public class GerenciadorReinos {
         };
     }
 
-    private void iniciarGeracaoDeOuro(Reino reino) {
+    private void iniciarGeracaoDeOuro(@NotNull Reino reino) {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override

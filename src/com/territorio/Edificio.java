@@ -2,18 +2,16 @@ package com.territorio;
 
 import com.jogo.Mensagens;
 import com.utils.Utils;
-
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static java.lang.System.in;
-import static java.lang.System.out;
+import static java.lang.System.*;
+import org.jetbrains.annotations.NotNull;
 
 public class Edificio {
-    private String nome;
-    private int custo;
-    private int beneficio;
+    private final String nome;
+    private final int custo;
+    private final int beneficio;
     private final Scanner scanner;
 
     public Edificio() {
@@ -42,8 +40,9 @@ public class Edificio {
         return beneficio;
     }
 
-    public void construirEdificios(Reino reino) {
+    public void construirEdificios(@NotNull Reino reino) {
         Utils ut = new Utils(scanner);
+        Mensagens msg = new Mensagens();
 
         while (true) {
             out.println("\n***********  CONSTRUIR EDIFÍCIOS  ************");
@@ -59,42 +58,117 @@ public class Edificio {
                 case 1:
                     Edificio quartel = new Edificio("Quartel", 500, 20);
 
-                    if (reino.getRecursos() >= quartel.getCusto()) {
-                        ut.exibirTextoPausado("\nConstruindo Quartel...");
-                        reino.getEdificios().add(quartel);
-                        reino.setRecursos(reino.getRecursos() - quartel.getCusto());
-                        reino.setPopulacao(reino.getPopulacao() + quartel.getBeneficio());
-                        ut.exibirTextoPausado("\nQuartel construído com sucesso!\n");
-                    } else {
-                        ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta construção...\n");
+                    int perguntaQtdQuartel = Integer.parseInt(ut.validarInfo("\nDeseja construir quantos quartéis?", "Por favor, informe apenas valores inteiros positivos!", valor -> {
+                        try {
+                            int quantidade = Integer.parseInt(valor);
+                            return quantidade >= 0;
+                        } catch (NumberFormatException e) {
+                            return false;
+                        }
+                    }));
+
+                    if (perguntaQtdQuartel == 0) {
+                        ut.exibirTextoPausado("\nVocê escolheu não construir nenhum quartel...\n");
+                        break;
                     }
+
+                    if (!ut.validarCompra(reino, perguntaQtdQuartel, quartel)) {
+                        ut.exibirTextoPausado("\nInfelizmente você não tem recursos para construir essa quantidade de quartéis...\n");
+                        break;
+                    }
+
+                    ut.exibirTextoPausado("\n" + (msg.exibirMensagem("mensagem.construcao.quartel." + (perguntaQtdQuartel == 1 ? "singular" : "plural"))));
+
+                    for (int i = 0; i < perguntaQtdQuartel; i++) {
+                        if (reino.getRecursos() >= quartel.getCusto()) {
+                            reino.getEdificios().add(quartel);
+                            reino.setRecursos(reino.getRecursos() - quartel.getCusto());
+                            reino.setPopulacao(reino.getPopulacao() + quartel.getBeneficio());
+                        } else {
+                            ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta construção...\n");
+                            break;
+                        }
+                    }
+
+                    ut.exibirTextoPausado("\n" + (msg.exibirMensagem("mensagem.construcao.quartel.sucesso." + (perguntaQtdQuartel == 1 ? "singular" : "plural"))) + "\n");
+
                     break;
                 case 2:
                     Edificio minaDeOuro = new Edificio("Mina de Ouro", 800, 0);
 
-                    if (reino.getRecursos() >= minaDeOuro.getCusto()) {
-                        ut.exibirTextoPausado("\nConstruindo Mina de Ouro...");
-                        reino.getEdificios().add(minaDeOuro);
-                        reino.setRecursos(reino.getRecursos() - minaDeOuro.getCusto());
-                        reino.setPopulacao(reino.getPopulacao() + minaDeOuro.getBeneficio());
-                        iniciarGeracaoDeOuro(reino);
-                        ut.exibirTextoPausado("\nMina de Ouro construída com sucesso!\n");
-                    } else {
-                        ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta construção...\n");
+                    int perguntaQtdMinaDeOuro = Integer.parseInt(ut.validarInfo("\nDeseja construir quantas minas de ouro?", "Por favor, informe apenas valores inteiros positivos!", valor -> {
+                        try {
+                            int quantidade = Integer.parseInt(valor);
+                            return quantidade >= 0;
+                        } catch (NumberFormatException e) {
+                            return false;
+                        }
+                    }));
+
+                    if (perguntaQtdMinaDeOuro == 0) {
+                        ut.exibirTextoPausado("\nVocê escolheu não construir nenhuma mina de ouro...\n");
+                        break;
                     }
+
+                    if (!ut.validarCompra(reino, perguntaQtdMinaDeOuro, minaDeOuro)) {
+                        ut.exibirTextoPausado("\nInfelizmente você não tem recursos para construir essa quantidade de minas de ouro...\n");
+                        break;
+                    }
+
+                    ut.exibirTextoPausado("\n" + (msg.exibirMensagem("mensagem.construcao.minadeouro." + (perguntaQtdMinaDeOuro == 1 ? "singular" : "plural"))));
+
+                    for (int i = 0; i < perguntaQtdMinaDeOuro; i++) {
+                        if (reino.getRecursos() >= minaDeOuro.getCusto()) {
+                            reino.getEdificios().add(minaDeOuro);
+                            reino.setRecursos(reino.getRecursos() - minaDeOuro.getCusto());
+                            reino.setPopulacao(reino.getPopulacao() + minaDeOuro.getBeneficio());
+                            iniciarGeracaoDeOuro(reino);
+                        } else {
+                            ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta construção...\n");
+                        }
+                    }
+
+                    ut.exibirTextoPausado("\n" + (msg.exibirMensagem("mensagem.construcao.minadeouro.sucesso." + (perguntaQtdMinaDeOuro == 1 ? "singular" : "plural"))) + "\n");
+
                     break;
                 case 3:
                     Edificio torreDeDefesa = new Edificio("Torre de Defesa", 300, 12);
 
-                    if (reino.getRecursos() >= torreDeDefesa.getCusto()) {
-                        ut.exibirTextoPausado("\nConstruindo Torre de Defesa...");
-                        reino.getEdificios().add(torreDeDefesa);
-                        reino.setRecursos(reino.getRecursos() - torreDeDefesa.getCusto());
-                        reino.setPopulacao(reino.getPopulacao() + torreDeDefesa.getBeneficio());
-                        ut.exibirTextoPausado("\nTorre de Defesa construída com sucesso!\n");
-                    } else {
-                        ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta construção...\n");
+                    int perguntaQtdTorresDeDefesa = Integer.parseInt(ut.validarInfo("\nDeseja construir quantas torres de defesa?", "Por favor, informe apenas valores inteiros positivos!", valor -> {
+                        try {
+                            int quantidade = Integer.parseInt(valor);
+                            return quantidade >= 0;
+                        } catch (NumberFormatException e) {
+                            return false;
+                        }
+                    }));
+
+                    if (perguntaQtdTorresDeDefesa == 0) {
+                        ut.exibirTextoPausado("\nVocê escolheu não construir nenhuma torre de defesa...\n");
+                        break;
                     }
+
+                    if (!ut.validarCompra(reino, perguntaQtdTorresDeDefesa, torreDeDefesa)) {
+                        ut.exibirTextoPausado("\nInfelizmente você não tem recursos para construir essa quantidade de torres de defesa...\n");
+                        break;
+                    }
+
+                    ut.exibirTextoPausado("\n" + (msg.exibirMensagem("mensagem.construcao.torrededefesa." + (perguntaQtdTorresDeDefesa == 1 ? "singular" : "plural"))));
+
+                    for (int i = 0; i < perguntaQtdTorresDeDefesa; i++) {
+                        if (reino.getRecursos() >= torreDeDefesa.getCusto()) {
+                            ut.exibirTextoPausado("\nConstruindo Torre de Defesa...");
+                            reino.getEdificios().add(torreDeDefesa);
+                            reino.setRecursos(reino.getRecursos() - torreDeDefesa.getCusto());
+                            reino.setPopulacao(reino.getPopulacao() + torreDeDefesa.getBeneficio());
+                            ut.exibirTextoPausado("\nTorre de Defesa construída com sucesso!\n");
+                        } else {
+                            ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta construção...\n");
+                        }
+                    }
+
+                    ut.exibirTextoPausado("\n" + (msg.exibirMensagem("mensagem.construcao.torrededefesa.sucesso." + (perguntaQtdTorresDeDefesa == 1 ? "singular" : "plural"))) + "\n");
+
                     break;
                 case 0:
                     ut.exibirTextoPausado("\nVoltando ao menu...\n");
@@ -105,7 +179,7 @@ public class Edificio {
         }
     }
 
-    private void iniciarGeracaoDeOuro(Reino reino) {
+    private void iniciarGeracaoDeOuro(@NotNull Reino reino) {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -115,7 +189,7 @@ public class Edificio {
         }, 3500, 3500);
     }
 
-    public void listarEdificios(Reino reino) {
+    public void listarEdificios(@NotNull Reino reino) {
         Utils ut = new Utils(scanner);
         Mensagens msg = new Mensagens();
 

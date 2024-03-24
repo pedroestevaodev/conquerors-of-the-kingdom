@@ -3,16 +3,14 @@ package com.exercito;
 import com.jogo.Mensagens;
 import com.territorio.Reino;
 import com.utils.Utils;
+import java.util.Scanner;
+import static java.lang.System.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Scanner;
-
-import static java.lang.System.*;
-
 public class Tropa {
-    private String nome;
-    private int custo;
-    private int custoTreinamento;
+    private final String nome;
+    private final int custo;
+    private final int custoTreinamento;
     private int forca;
     private int defesa;
     private final Scanner scanner;
@@ -63,8 +61,9 @@ public class Tropa {
         this.defesa = defesa;
     }
 
-    public void contratar(Reino reino) {
+    public void contratar(@NotNull Reino reino) {
         Utils ut = new Utils(scanner);
+        Mensagens msg = new Mensagens();
 
         while (true) {
             out.println("\n*************  EXPANDIR TROPAS  **************");
@@ -80,46 +79,95 @@ public class Tropa {
                 case 1:
                     Tropa arqueiro = new Tropa("Arqueiro", 60, 100, 20, 15);
 
-                    String perguntaQtdArqueiros = ut.validarInfo("Deseja contratar quantos arqueiros? (1-" + reino.getPopulacao() + ")", "Por favor, informe apenas valores inteiros positivos!", valor -> { try { int quantidade = Integer.parseInt(valor); return quantidade >= 0; } catch (NumberFormatException e) { return false; } } );
+                    int perguntaQtdArqueiros = ut.validarInfoInt("\nDeseja contratar quantos arqueiros?", "Por favor, informe apenas valores inteiros positivos!", valor -> Integer.parseInt(String.valueOf(valor)) >= 0);
+
+                    if (perguntaQtdArqueiros == 0) {
+                        ut.exibirTextoPausado("\nVocê escolheu não contratar nenhum arqueiro...\n");
+                        break;
+                    }
+
+                    if (!ut.validarCompra(reino, perguntaQtdArqueiros, arqueiro)) {
+                        ut.exibirTextoPausado("\nInfelizmente você não tem recursos para contratar essa quantidade de arqueiros...\n");
+                        break;
+                    }
+
+                    ut.exibirTextoPausado("\n" + (msg.exibirMensagem("mensagem.contratar.arqueiro." + (perguntaQtdArqueiros == 1 ? "singular" : "plural"))));
 
                     for (int i = 0; i < perguntaQtdArqueiros; i++) {
                         if (reino.getRecursos() >= arqueiro.getCusto()) {
-                            ut.exibirTextoPausado("\nContratando Arqueiro...");
                             reino.getTropas().add(arqueiro);
                             reino.setRecursos(reino.getRecursos() - arqueiro.getCusto());
                             reino.atualizaForcaDefesaReino();
-                            ut.exibirTextoPausado("\nArqueiro contratado com sucesso!\n");
                         } else {
                             ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta contratação...\n");
+                            break;
                         }
                     }
+
+                    ut.exibirTextoPausado("\n" + (msg.exibirMensagem("mensagem.contratar.arqueiro.sucesso." + (perguntaQtdArqueiros == 1 ? "singular" : "plural"))) + "\n");
 
                     break;
                 case 2:
                     Tropa cavaleiro = new Tropa("Cavaleiro", 100, 350, 50, 40);
 
-                    if (reino.getRecursos() >= cavaleiro.getCusto()) {
-                        ut.exibirTextoPausado("\nContratando Cavaleiro...");
-                        reino.getTropas().add(cavaleiro);
-                        reino.setRecursos(reino.getRecursos() - cavaleiro.getCusto());
-                        reino.atualizaForcaDefesaReino();
-                        ut.exibirTextoPausado("\nCavaleiro contratado com sucesso!\n");
-                    } else {
-                        ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta contratação...\n");
+                    int perguntaQtdCavaleiros = ut.validarInfoInt("\nDeseja contratar quantos cavaleiros?", "Por favor, informe apenas valores inteiros positivos!", valor -> Integer.parseInt(String.valueOf(valor)) >= 0);
+
+                    if (perguntaQtdCavaleiros == 0) {
+                        ut.exibirTextoPausado("\nVocê escolheu não contratar nenhum cavaleiro...\n");
+                        break;
                     }
+
+                    if (!ut.validarCompra(reino, perguntaQtdCavaleiros, cavaleiro)) {
+                        ut.exibirTextoPausado("\nInfelizmente você não tem recursos para contratar essa quantidade de cavaleiros...\n");
+                        break;
+                    }
+
+                    ut.exibirTextoPausado("\n"+msg.exibirMensagem("mensagem.contratar.cavaleiro." + (perguntaQtdCavaleiros == 1 ? "singular" : "plural")));
+
+                    for (int i = 0; i < perguntaQtdCavaleiros; i++) {
+                        if (reino.getRecursos() >= cavaleiro.getCusto()) {
+                            reino.getTropas().add(cavaleiro);
+                            reino.setRecursos(reino.getRecursos() - cavaleiro.getCusto());
+                            reino.atualizaForcaDefesaReino();
+                        } else {
+                            ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta contratação...\n");
+                            break;
+                        }
+                    }
+
+                    ut.exibirTextoPausado("\n" + msg.exibirMensagem("mensagem.contratar.cavaleiro.sucesso." + (perguntaQtdCavaleiros == 1 ? "singular" : "plural")) + "\n");
+
                     break;
                 case 3:
                     Tropa lanceiro = new Tropa("Lanceiro", 40, 200, 10, 7);
 
-                    if (reino.getRecursos() >= lanceiro.getCusto()) {
-                        ut.exibirTextoPausado("\nContratando Lanceiro...");
-                        reino.getTropas().add(lanceiro);
-                        reino.setRecursos(reino.getRecursos() - lanceiro.getCusto());
-                        reino.atualizaForcaDefesaReino();
-                        ut.exibirTextoPausado("\nLanceiro contratado com sucesso!\n");
-                    } else {
-                        ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta contratação...\n");
+                    int perguntaQtdLanceiros = ut.validarInfoInt("\nDeseja contratar quantos lanceiros?", "Por favor, informe apenas valores inteiros positivos!", valor -> Integer.parseInt(String.valueOf(valor)) >= 0);
+
+                    if (perguntaQtdLanceiros == 0) {
+                        ut.exibirTextoPausado("\nVocê escolheu não contratar nenhum lanceiro...\n");
+                        break;
                     }
+
+                    if (!ut.validarCompra(reino, perguntaQtdLanceiros, lanceiro)) {
+                        ut.exibirTextoPausado("\nInfelizmente você não tem recursos para contratar essa quantidade de lanceiros...\n");
+                        break;
+                    }
+
+                    ut.exibirTextoPausado("\n"+msg.exibirMensagem("mensagem.contratar.lanceiro." + (perguntaQtdLanceiros == 1 ? "singular" : "plural")));
+
+                    for (int i = 0; i < perguntaQtdLanceiros; i++) {
+                        if (reino.getRecursos() >= lanceiro.getCusto()) {
+                            reino.getTropas().add(lanceiro);
+                            reino.setRecursos(reino.getRecursos() - lanceiro.getCusto());
+                            reino.atualizaForcaDefesaReino();
+                        } else {
+                            ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta contratação...\n");
+                            break;
+                        }
+                    }
+
+                    ut.exibirTextoPausado("\n" + msg.exibirMensagem("mensagem.contratar.lanceiro.sucesso." + (perguntaQtdLanceiros == 1 ? "singular" : "plural")) + "\n");
+
                     break;
                 case 0:
                     ut.exibirTextoPausado("\nVoltando ao menu...\n");
@@ -130,7 +178,7 @@ public class Tropa {
         }
     }
 
-    public void treinar(Reino reino) {
+    public void treinar(@NotNull Reino reino) {
         Utils ut = new Utils(scanner);
 
         if (reino.getTropas().isEmpty()) {

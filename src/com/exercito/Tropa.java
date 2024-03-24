@@ -91,6 +91,16 @@ public class Tropa {
                         break;
                     }
 
+                    if (reino.getPopulacao() == reino.getTropas().size()) {
+                        ut.exibirTextoPausado("\nSeu reino atingiu o limite máximo de habitantes. Que tal construir alguns edifícios?\n");
+                        break;
+                    }
+
+                    if ((perguntaQtdArqueiros + reino.getTropas().size()) > reino.getPopulacao()) {
+                        ut.exibirTextoPausado("\nInfelizmente você não pode contratar essa quantidade de arqueiros...\n");
+                        break;
+                    }
+
                     ut.exibirTextoPausado("\n" + (msg.exibirMensagem("mensagem.contratar.arqueiro." + (perguntaQtdArqueiros == 1 ? "singular" : "plural"))));
 
                     for (int i = 0; i < perguntaQtdArqueiros; i++) {
@@ -122,6 +132,16 @@ public class Tropa {
                         break;
                     }
 
+                    if (reino.getPopulacao() == reino.getTropas().size()) {
+                        ut.exibirTextoPausado("\nSeu reino atingiu o limite máximo de habitantes. Que tal construir alguns edifícios?\n");
+                        break;
+                    }
+
+                    if ((perguntaQtdCavaleiros + reino.getTropas().size()) > reino.getPopulacao()) {
+                        ut.exibirTextoPausado("\nInfelizmente você não pode contratar essa quantidade de cavaleiros...\n");
+                        break;
+                    }
+
                     ut.exibirTextoPausado("\n"+msg.exibirMensagem("mensagem.contratar.cavaleiro." + (perguntaQtdCavaleiros == 1 ? "singular" : "plural")));
 
                     for (int i = 0; i < perguntaQtdCavaleiros; i++) {
@@ -150,6 +170,16 @@ public class Tropa {
 
                     if (!ut.validarCompra(reino, perguntaQtdLanceiros, lanceiro)) {
                         ut.exibirTextoPausado("\nInfelizmente você não tem recursos para contratar essa quantidade de lanceiros...\n");
+                        break;
+                    }
+
+                    if (reino.getPopulacao() == reino.getTropas().size()) {
+                        ut.exibirTextoPausado("\nSeu reino atingiu o limite máximo de habitantes. Que tal construir alguns edifícios?\n");
+                        break;
+                    }
+
+                    if ((perguntaQtdLanceiros + reino.getTropas().size()) > reino.getPopulacao()) {
+                        ut.exibirTextoPausado("\nInfelizmente você não pode contratar essa quantidade de lanceiros...\n");
                         break;
                     }
 
@@ -221,10 +251,6 @@ public class Tropa {
                         return;
                     }
 
-                    if (reino.getPopulacao() == reino.getTropas().size()) {
-                        ut.exibirTextoPausado("\nSeu reino atingiu o limite máximo de habitantes. Que tal construir alguns edifícios?\n");
-                    }
-
                     if (reino.getRecursos() >= arqueiro.getCustoTreinamento()) {
                         ut.exibirTextoPausado("\nIniciando treinamento dos Arqueiros...");
                         for (Tropa tropa : reino.getTropas()) {
@@ -248,10 +274,6 @@ public class Tropa {
                         return;
                     }
 
-                    if (reino.getPopulacao() == reino.getTropas().size()) {
-                        ut.exibirTextoPausado("\nSeu reino atingiu o limite máximo de habitantes. Que tal construir alguns edifícios?\n");
-                    }
-
                     if (reino.getRecursos() >= cavaleiro.getCustoTreinamento()) {
                         ut.exibirTextoPausado("\nIniciando treinamento dos Cavaleiros...");
                         for (Tropa tropa : reino.getTropas()) {
@@ -273,10 +295,6 @@ public class Tropa {
                     if (lanceiros == 0) {
                         ut.exibirTextoPausado("\nSeu reino não possui lanceiros para poder treinar. Que tal contratar alguns?\n");
                         return;
-                    }
-
-                    if (reino.getPopulacao() == reino.getTropas().size()) {
-                        ut.exibirTextoPausado("\nSeu reino atingiu o limite máximo de habitantes. Que tal construir alguns edifícios?\n");
                     }
 
                     if (reino.getRecursos() >= lanceiro.getCustoTreinamento()) {

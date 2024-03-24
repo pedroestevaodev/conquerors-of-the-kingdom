@@ -160,7 +160,7 @@ public class Reino {
         ut.limparPrompt();
         ut.exibirTextoPausado("Foi declarada guerra e não tem como voltar atrás...\n");
 
-        if (player.getReino().getForcaDefesa().forca() == 0 && player.getReino().getForcaDefesa().defesa() == 0) {
+        if (player.getReino().getTropas().isEmpty() || player.getReino().getEdificios().isEmpty()) {
             ut.exibirTextoPausado(msg.parametrosMensagem(msg.exibirMensagem("mensagem.batalha.none."+player.getGenero().toLowerCase()), player.getNome(), getNome()).replace("[BREAK]", "\n") + "\n");
             return;
         }
@@ -266,7 +266,7 @@ public class Reino {
 
         ut.exibirTextoPausado("\nSeu reino enviou uma proposta de aliança para o reino de " + getNome() + "...\n");
 
-        if (player.getReino().getTropas().isEmpty() && player.getReino().getEdificios().isEmpty()) {
+        if (player.getReino().getTropas().isEmpty() || player.getReino().getEdificios().isEmpty()) {
             ut.exibirTextoPausado(msg.parametrosMensagem(msg.exibirMensagem("mensagem.alianca.none."+player.getGenero()), this.getNome()) + "\n");
             return;
         }
@@ -287,13 +287,13 @@ public class Reino {
     private void coletarRecursos(@NotNull Reino reinoColeta, @NotNull Reino reinoPerde) {
         Utils ut = new Utils(scanner);
 
-        if (!reinoColeta.getDominados().contains(reinoPerde)) {
-            ut.exibirTextoPausado("\nVocê não pode coletar recursos de um reino que não tenha sido dominado por você...\n");
+        if (reinoColeta.getAliados().contains(reinoPerde)) {
+            ut.exibirTextoPausado("\nEste reino é seu aliado, você não pode coletar seus recursos! Nunca se esqueça que a ganância é a ruina do homem...\n");
             return;
         }
 
-        if (reinoColeta.getAliados().contains(reinoPerde)) {
-            ut.exibirTextoPausado("\nEste reino é seu aliado, você não pode coletar seus recursos! Nunca se esqueça que a ganância é a ruina do homem...\n");
+        if (!reinoColeta.getDominados().contains(reinoPerde)) {
+            ut.exibirTextoPausado("\nVocê não pode coletar recursos de um reino que não tenha sido dominado por você...\n");
             return;
         }
 

@@ -39,13 +39,13 @@ public class CriarPlayer {
 
             switch (opcaoEdicao) {
                 case "nome":
-                    nomePlayer = ut.gerarPergunta("Por favor, digite seu nome:");
+                    nomePlayer = ut.gerarPergunta("\nPor favor, digite seu nome:");
                     break;
                 case "gênero":
-                    generoPlayer = ut.gerarPergunta("Você deseja ser um rei ou uma rainha? (Digite 'rei' ou 'rainha'):").toLowerCase();
+                    generoPlayer = ut.gerarPergunta("\nVocê deseja ser um rei ou uma rainha? (Digite 'rei' ou 'rainha'):").toLowerCase();
                     break;
                 case "reino":
-                    reinoPlayer = ut.gerarPergunta("Qual nome você deseja dar para o seu reino?");
+                    reinoPlayer = ut.gerarPergunta("\nQual nome você deseja dar para o seu reino?");
                     break;
                 default:
                     out.println("Opção inválida!");

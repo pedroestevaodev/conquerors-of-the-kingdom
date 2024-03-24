@@ -58,14 +58,7 @@ public class Edificio {
                 case 1:
                     Edificio quartel = new Edificio("Quartel", 500, 20);
 
-                    int perguntaQtdQuartel = Integer.parseInt(ut.validarInfo("\nDeseja construir quantos quartéis?", "Por favor, informe apenas valores inteiros positivos!", valor -> {
-                        try {
-                            int quantidade = Integer.parseInt(valor);
-                            return quantidade >= 0;
-                        } catch (NumberFormatException e) {
-                            return false;
-                        }
-                    }));
+                    int perguntaQtdQuartel = ut.validarInfoInt("\nDeseja construir quantos quartéis?", "Por favor, informe apenas valores inteiros positivos!", valor -> Integer.parseInt(String.valueOf(valor)) >= 0);
 
                     if (perguntaQtdQuartel == 0) {
                         ut.exibirTextoPausado("\nVocê escolheu não construir nenhum quartel...\n");
@@ -96,14 +89,7 @@ public class Edificio {
                 case 2:
                     Edificio minaDeOuro = new Edificio("Mina de Ouro", 800, 0);
 
-                    int perguntaQtdMinaDeOuro = Integer.parseInt(ut.validarInfo("\nDeseja construir quantas minas de ouro?", "Por favor, informe apenas valores inteiros positivos!", valor -> {
-                        try {
-                            int quantidade = Integer.parseInt(valor);
-                            return quantidade >= 0;
-                        } catch (NumberFormatException e) {
-                            return false;
-                        }
-                    }));
+                    int perguntaQtdMinaDeOuro = ut.validarInfoInt("\nDeseja construir quantas minas de ouro?", "Por favor, informe apenas valores inteiros positivos!", valor -> Integer.parseInt(String.valueOf(valor)) >= 0);
 
                     if (perguntaQtdMinaDeOuro == 0) {
                         ut.exibirTextoPausado("\nVocê escolheu não construir nenhuma mina de ouro...\n");
@@ -134,14 +120,7 @@ public class Edificio {
                 case 3:
                     Edificio torreDeDefesa = new Edificio("Torre de Defesa", 300, 12);
 
-                    int perguntaQtdTorresDeDefesa = Integer.parseInt(ut.validarInfo("\nDeseja construir quantas torres de defesa?", "Por favor, informe apenas valores inteiros positivos!", valor -> {
-                        try {
-                            int quantidade = Integer.parseInt(valor);
-                            return quantidade >= 0;
-                        } catch (NumberFormatException e) {
-                            return false;
-                        }
-                    }));
+                    int perguntaQtdTorresDeDefesa = ut.validarInfoInt("\nDeseja construir quantas torres de defesa?", "Por favor, informe apenas valores inteiros positivos!", valor -> Integer.parseInt(String.valueOf(valor)) >= 0);
 
                     if (perguntaQtdTorresDeDefesa == 0) {
                         ut.exibirTextoPausado("\nVocê escolheu não construir nenhuma torre de defesa...\n");
@@ -157,11 +136,9 @@ public class Edificio {
 
                     for (int i = 0; i < perguntaQtdTorresDeDefesa; i++) {
                         if (reino.getRecursos() >= torreDeDefesa.getCusto()) {
-                            ut.exibirTextoPausado("\nConstruindo Torre de Defesa...");
                             reino.getEdificios().add(torreDeDefesa);
                             reino.setRecursos(reino.getRecursos() - torreDeDefesa.getCusto());
                             reino.setPopulacao(reino.getPopulacao() + torreDeDefesa.getBeneficio());
-                            ut.exibirTextoPausado("\nTorre de Defesa construída com sucesso!\n");
                         } else {
                             ut.exibirTextoPausado("\nInfelizmente você não tem recursos para esta construção...\n");
                         }

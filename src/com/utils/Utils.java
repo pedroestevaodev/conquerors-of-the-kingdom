@@ -6,7 +6,6 @@ import com.territorio.Reino;
 import java.util.Scanner;
 import java.util.function.Predicate;
 import static java.lang.System.out;
-import org.jetbrains.annotations.NotNull;
 
 public class Utils {
     private final Scanner scanner;
@@ -15,17 +14,17 @@ public class Utils {
         this.scanner = scanner;
     }
 
-    public String gerarPergunta(@NotNull String pergunta) {
+    public String gerarPergunta(String pergunta) {
         out.println(pergunta);
         return scanner.nextLine();
     }
 
-    public int gerarPerguntaInt(@NotNull String pergunta) {
+    public int gerarPerguntaInt(String pergunta) {
         out.println(pergunta);
         return scanner.nextInt();
     }
 
-    public String validarInfo(@NotNull String mensagem, String mensagemErro, @NotNull Predicate<String> validacao) {
+    public String validarInfo(String mensagem, String mensagemErro, Predicate<String> validacao) {
         String valor = gerarPergunta(mensagem);
 
         while (!validacao.test(valor)) {
@@ -39,7 +38,7 @@ public class Utils {
         return valor;
     }
 
-    public int validarInfoInt(@NotNull String mensagem, String mensagemErro, @NotNull Predicate<Integer> validacao) {
+    public int validarInfoInt(String mensagem, String mensagemErro, Predicate<Integer> validacao) {
         int valor = gerarPerguntaInt(mensagem);
 
         while (!validacao.test(valor)) {
@@ -67,14 +66,14 @@ public class Utils {
         }
     }
 
-    public void exibirTextoPausado(@NotNull String texto) {
+    public void exibirTextoPausado(String texto) {
         for (char c : texto.toCharArray()) {
             out.print(c);
             textoPausado(50);
         }
     }
 
-    public boolean validarCompra(@NotNull Reino reino, int qtd, @NotNull Object objecto) {
+    public boolean validarCompra(Reino reino, int qtd, Object objecto) {
         int recursosDiponiveis = reino.getRecursos();
         int custo = 0;
 

@@ -6,7 +6,6 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import static java.lang.System.*;
-import org.jetbrains.annotations.NotNull;
 
 public class Edificio {
     private final String nome;
@@ -40,7 +39,7 @@ public class Edificio {
         return beneficio;
     }
 
-    public void construirEdificios(@NotNull Reino reino) {
+    public void construirEdificios(Reino reino) {
         Utils ut = new Utils(scanner);
         Mensagens msg = new Mensagens();
 
@@ -156,7 +155,7 @@ public class Edificio {
         }
     }
 
-    private void iniciarGeracaoDeOuro(@NotNull Reino reino) {
+    private void iniciarGeracaoDeOuro(Reino reino) {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -166,7 +165,7 @@ public class Edificio {
         }, 3500, 3500);
     }
 
-    public void listarEdificios(@NotNull Reino reino) {
+    public void listarEdificios(Reino reino) {
         Utils ut = new Utils(scanner);
         Mensagens msg = new Mensagens();
 

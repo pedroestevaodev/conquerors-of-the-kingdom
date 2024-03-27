@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import static java.lang.System.*;
-import org.jetbrains.annotations.NotNull;
 
 public class Reino {
     private String nome;
@@ -100,7 +99,7 @@ public class Reino {
         this.dominados = dominados;
     }
 
-    public void interagirReino(@NotNull Player player) {
+    public void interagirReino(Player player) {
         Utils ut = new Utils(scanner);
 
         while (true) {
@@ -135,7 +134,7 @@ public class Reino {
         }
     }
 
-    private void batalhar(@NotNull Player player) {
+    private void batalhar(Player player) {
         Random random = new Random();
         Utils ut = new Utils(scanner);
         Mensagens msg = new Mensagens();
@@ -243,7 +242,7 @@ public class Reino {
         }
     }
 
-    private void fazerAlianca(@NotNull Player player) {
+    private void fazerAlianca(Player player) {
         Utils ut = new Utils(scanner);
         Mensagens msg = new Mensagens();
 
@@ -284,7 +283,7 @@ public class Reino {
         }
     }
 
-    private void coletarRecursos(@NotNull Reino reinoColeta, @NotNull Reino reinoPerde) {
+    private void coletarRecursos(Reino reinoColeta, Reino reinoPerde) {
         Utils ut = new Utils(scanner);
 
         if (reinoColeta.getAliados().contains(reinoPerde)) {

@@ -4,7 +4,6 @@ import com.exercito.Tropa;
 import com.jogo.Mensagens;
 import java.util.*;
 import static java.lang.System.*;
-import org.jetbrains.annotations.NotNull;
 
 public class GerenciadorReinos {
     private static final int NUMERO_MINIMO_REINOS = 3;
@@ -60,7 +59,7 @@ public class GerenciadorReinos {
         return reinos;
     }
 
-    private boolean existeNomeReino(@NotNull List<Reino> reinos, @NotNull String nome) {
+    private boolean existeNomeReino(List<Reino> reinos, String nome) {
         for (Reino reino : reinos) {
             if (reino.getNome().equals(nome)) {
                 return true;
@@ -93,7 +92,7 @@ public class GerenciadorReinos {
         };
     }
 
-    private void iniciarGeracaoDeOuro(@NotNull Reino reino) {
+    private void iniciarGeracaoDeOuro(Reino reino) {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override

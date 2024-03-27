@@ -5,7 +5,6 @@ import com.territorio.Reino;
 import com.utils.Utils;
 import java.util.Scanner;
 import static java.lang.System.*;
-import org.jetbrains.annotations.NotNull;
 
 public class Tropa {
     private final String nome;
@@ -61,7 +60,7 @@ public class Tropa {
         this.defesa = defesa;
     }
 
-    public void contratar(@NotNull Reino reino) {
+    public void contratar(Reino reino) {
         Utils ut = new Utils(scanner);
         Mensagens msg = new Mensagens();
 
@@ -208,7 +207,7 @@ public class Tropa {
         }
     }
 
-    public void treinar(@NotNull Reino reino) {
+    public void treinar(Reino reino) {
         Utils ut = new Utils(scanner);
 
         if (reino.getTropas().isEmpty()) {
@@ -335,7 +334,7 @@ public class Tropa {
         }
     }
 
-    public void listarTropas(@NotNull Reino reino) {
+    public void listarTropas(Reino reino) {
         Utils ut = new Utils(scanner);
         Mensagens msg = new Mensagens();
 

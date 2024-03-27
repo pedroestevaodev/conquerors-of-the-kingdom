@@ -5,17 +5,16 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
 
 public class Mensagens {
-    public String parametrosMensagem(@NotNull String mensagem, String @NotNull ... parametros) {
+    public String parametrosMensagem(String mensagem, String... parametros) {
         for (int i = 0; i < parametros.length; i++) {
             mensagem = mensagem.replace("{"+i+"}", parametros[i]);
         }
         return mensagem;
     }
 
-    public String exibirMensagem(@NotNull String mensagem) {
+    public String exibirMensagem(String mensagem) {
         Properties prop = new Properties();
 
         try {
@@ -27,7 +26,7 @@ public class Mensagens {
         }
     }
 
-    public Set<String> obterDados(@NotNull String nomeArquivo) {
+    public Set<String> obterDados(String nomeArquivo) {
         Set<String> nomes = new HashSet<>();
         Properties properties = new Properties();
 
@@ -44,7 +43,7 @@ public class Mensagens {
         return nomes;
     }
 
-    public String aleatorizarDados(@NotNull Set<String> nomes, @NotNull Random random) {
+    public String aleatorizarDados(Set<String> nomes, Random random) {
         int indice = random.nextInt(nomes.size());
         int i = 0;
 

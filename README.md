@@ -29,7 +29,7 @@ This project was designed to **reinforce OOP concepts** such as **inheritance, p
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/Pedro-Estevao/conquerors-of-the-kingdom
-   cd rpg-battle-simulator
+   cd conquerors-of-the-kingdom
    ```
 2. **Open the project in an IDE:**
    - Import it as a Java project.

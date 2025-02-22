@@ -28,7 +28,7 @@ This project was designed to **reinforce OOP concepts** such as **inheritance, p
 ### ⚡ Installation Steps
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/rpg-battle-simulator.git
+   git clone https://github.com/Pedro-Estevao/conquerors-of-the-kingdom
    cd rpg-battle-simulator
    ```
 2. **Open the project in an IDE:**

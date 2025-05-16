@@ -2,7 +2,7 @@
 
 <p style="text-align: center;">
     <a href="https://www.baraodemaua.br">
-        <img src="https://res.cloudinary.com/dge3g9rcw/image/upload/v1739917377/github/poijmfpf5wgzudkbxihw.jpg" alt="illustrative image" />
+        <img src="https://res.cloudinary.com/dge3g9rcw/image/upload/v1739232898/github/mto1tierlcwn8pq4fh8r.webp" alt="Logo Centro Universitário Barão de Mauá" />
     </a>
 </p>
 
